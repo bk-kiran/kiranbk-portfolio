@@ -77,7 +77,7 @@ function PixelArt({ text }: { text: string }) {
                     style={{
                       width: `${PX}px`,
                       height: `${PY}px`,
-                      background: bit ? 'var(--t-prompt)' : 'transparent',
+                      background: bit ? 'var(--color-prompt)' : 'transparent',
                     }}
                   />
                 ))}
@@ -100,19 +100,19 @@ registry.register({
           <PixelArt text="KIRAN BK" />
         </div>
 
-        <div style={{ color: 'var(--t-text)' }}>
+        <div style={{ color: 'var(--color-text)' }}>
           {personal.degree} · {personal.school} {personal.classYear} · {personal.gpa} GPA · software engineer + AI/ML
         </div>
 
         <div className="space-y-0.5">
           <div>
-            <span style={{ color: 'var(--t-text-dim)' }}>{'→ '}</span>
-            <span style={{ color: 'var(--t-green)' }}>seeking </span>
-            <span style={{ color: 'var(--t-yellow)' }}>{personal.seeking[0]}</span>
+            <span style={{ color: 'var(--color-text-dim)' }}>{'→ '}</span>
+            <span style={{ color: 'var(--color-green)' }}>seeking </span>
+            <span style={{ color: 'var(--color-yellow)' }}>{personal.seeking[0]}</span>
           </div>
           <div>
-            <span style={{ color: 'var(--t-text-dim)' }}>{'  and '}</span>
-            <span style={{ color: 'var(--t-yellow)' }}>{personal.seeking[1]}</span>
+            <span style={{ color: 'var(--color-text-dim)' }}>{'  and '}</span>
+            <span style={{ color: 'var(--color-yellow)' }}>{personal.seeking[1]}</span>
           </div>
         </div>
 
@@ -121,18 +121,18 @@ registry.register({
             <div
               key={i}
               className="pl-3 py-1"
-              style={{ borderLeft: '2px solid var(--t-green)' }}
+              style={{ borderLeft: '2px solid var(--color-green)' }}
             >
               <div
                 className="text-lg font-bold leading-tight"
-                style={{ color: 'var(--t-green)' }}
+                style={{ color: 'var(--color-green)' }}
               >
                 {h.metric}
               </div>
-              <div className="text-xs" style={{ color: 'var(--t-text)' }}>
+              <div className="text-xs" style={{ color: 'var(--color-text)' }}>
                 {h.label}
               </div>
-              <div className="text-xs" style={{ color: 'var(--t-text-dim)' }}>
+              <div className="text-xs" style={{ color: 'var(--color-text-dim)' }}>
                 {'// '}{h.source}
               </div>
             </div>

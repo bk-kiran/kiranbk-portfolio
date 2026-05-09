@@ -6,3 +6,4 @@ import './skills';
 import './contact';
 import './clear';
 import './sudo';
+import './theme';

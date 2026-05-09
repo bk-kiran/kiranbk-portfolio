@@ -27,14 +27,14 @@ registry.register({
             <span
               className="shrink-0 text-xs"
               style={{
-                color: 'var(--t-green)',
+                color: 'var(--color-green)',
                 minWidth: '220px',
                 display: 'inline-block',
               }}
             >
               {cmd}
             </span>
-            <span className="text-xs" style={{ color: 'var(--t-text-dim)' }}>
+            <span className="text-xs" style={{ color: 'var(--color-text-dim)' }}>
               {desc}
             </span>
           </div>

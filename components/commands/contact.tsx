@@ -20,7 +20,7 @@ registry.register({
               <span
                 className="select-none"
                 style={{
-                  color: 'var(--t-text-dim)',
+                  color: 'var(--color-text-dim)',
                   minWidth: '72px',
                   display: 'inline-block',
                 }}
@@ -32,7 +32,7 @@ registry.register({
                 target={href.startsWith('mailto') ? undefined : '_blank'}
                 rel="noopener noreferrer"
                 className="hover:underline"
-                style={{ color: 'var(--t-cyan)' }}
+                style={{ color: 'var(--color-cyan)' }}
               >
                 {display} ↗
               </a>
@@ -40,7 +40,7 @@ registry.register({
           ))}
         </div>
 
-        <div className="text-xs" style={{ color: 'var(--t-text-dim)' }}>
+        <div className="text-xs" style={{ color: 'var(--color-text-dim)' }}>
           {'// or just run `sudo hire-me` to draft an email'}
         </div>
       </div>

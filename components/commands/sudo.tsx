@@ -10,7 +10,7 @@ registry.register({
   handler(args) {
     if (args[0] !== 'hire-me') {
       return (
-        <span style={{ color: 'var(--t-red)' }}>
+        <span style={{ color: 'var(--color-red)' }}>
           sudo: unknown command &quot;{args[0] ?? ''}&quot; — did you mean `sudo hire-me`?
         </span>
       );
@@ -21,7 +21,7 @@ registry.register({
     }
 
     return (
-      <span style={{ color: 'var(--t-green)' }}>
+      <span style={{ color: 'var(--color-green)' }}>
         // drafted — opening mail client
       </span>
     );

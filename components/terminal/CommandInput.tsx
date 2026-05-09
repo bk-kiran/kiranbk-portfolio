@@ -41,11 +41,11 @@ export default function CommandInput({ history, onSubmit }: Props) {
   return (
     <div
       className="flex items-center gap-2 px-6 py-3 shrink-0 border-t"
-      style={{ borderColor: 'var(--t-border)' }}
+      style={{ borderColor: 'var(--color-border)' }}
     >
       <span className="select-none shrink-0 flex items-center gap-1">
-        <span style={{ color: 'var(--t-prompt)' }}>kiran.sh</span>
-        <span style={{ color: 'var(--t-text-dim)' }}>~ $</span>
+        <span style={{ color: 'var(--color-prompt)' }}>kiran.sh</span>
+        <span style={{ color: 'var(--color-text-dim)' }}>~ $</span>
       </span>
       <input
         ref={inputRef}
@@ -58,7 +58,7 @@ export default function CommandInput({ history, onSubmit }: Props) {
         autoCorrect="off"
         autoCapitalize="off"
         className="flex-1 bg-transparent outline-none border-none"
-        style={{ color: 'var(--t-text)', caretColor: 'var(--t-prompt)' }}
+        style={{ color: 'var(--color-text)', caretColor: 'var(--color-prompt)' }}
       />
     </div>
   );

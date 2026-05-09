@@ -18,7 +18,7 @@ registry.register({
           <div key={label}>
             <div
               className="text-[10px] font-semibold tracking-widest uppercase mb-2 select-none"
-              style={{ color: 'var(--t-text-dim)' }}
+              style={{ color: 'var(--color-text-dim)' }}
             >
               {label}
             </div>
@@ -28,8 +28,8 @@ registry.register({
                   key={skill}
                   className="text-xs px-2 py-0.5"
                   style={{
-                    color: 'var(--t-text)',
-                    border: '1px solid var(--t-border)',
+                    color: 'var(--color-text)',
+                    border: '1px solid var(--color-border)',
                     borderRadius: '3px',
                   }}
                 >

@@ -25,16 +25,16 @@ export default function Sidebar({ activeSection, onNavigate }: Props) {
     <aside
       className="w-60 shrink-0 flex flex-col h-full overflow-y-auto border-r text-xs"
       style={{
-        background: 'var(--t-bg-secondary)',
-        borderColor: 'var(--t-border)',
-        color: 'var(--t-text)',
+        background: 'var(--color-bg-secondary)',
+        borderColor: 'var(--color-border)',
+        color: 'var(--color-text)',
       }}
     >
       {/* Quick Links */}
       <div className="px-4 pt-5 pb-2">
         <p
           className="text-[10px] font-semibold tracking-widest uppercase mb-3 select-none"
-          style={{ color: 'var(--t-text-dim)' }}
+          style={{ color: 'var(--color-text-dim)' }}
         >
           Quick Links
         </p>
@@ -47,13 +47,13 @@ export default function Sidebar({ activeSection, onNavigate }: Props) {
                 onClick={() => onNavigate(item.cmd)}
                 className="w-full text-left flex items-center gap-1.5 px-2 py-1 rounded transition-colors"
                 style={{
-                  background: isActive ? 'var(--t-border)' : 'transparent',
-                  color: isActive ? 'var(--t-text)' : 'var(--t-text-dim)',
+                  background: isActive ? 'var(--color-border)' : 'transparent',
+                  color: isActive ? 'var(--color-text)' : 'var(--color-text-dim)',
                 }}
               >
                 <span
                   className="w-3 shrink-0 select-none"
-                  style={{ color: isActive ? 'var(--t-prompt)' : 'transparent' }}
+                  style={{ color: isActive ? 'var(--color-prompt)' : 'transparent' }}
                 >
                   {'>'}
                 </span>
@@ -64,13 +64,13 @@ export default function Sidebar({ activeSection, onNavigate }: Props) {
         </nav>
       </div>
 
-      <div className="mx-4 my-2 border-t" style={{ borderColor: 'var(--t-border)' }} />
+      <div className="mx-4 my-2 border-t" style={{ borderColor: 'var(--color-border)' }} />
 
       {/* External */}
       <div className="px-4 py-2">
         <p
           className="text-[10px] font-semibold tracking-widest uppercase mb-3 select-none"
-          style={{ color: 'var(--t-text-dim)' }}
+          style={{ color: 'var(--color-text-dim)' }}
         >
           External
         </p>
@@ -80,7 +80,7 @@ export default function Sidebar({ activeSection, onNavigate }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             className="block px-2 hover:underline"
-            style={{ color: 'var(--t-yellow)' }}
+            style={{ color: 'var(--color-yellow)' }}
           >
             resume.pdf
           </a>
@@ -89,7 +89,7 @@ export default function Sidebar({ activeSection, onNavigate }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             className="block px-2 hover:underline"
-            style={{ color: 'var(--t-cyan)' }}
+            style={{ color: 'var(--color-cyan)' }}
           >
             github ↗
           </a>
@@ -98,37 +98,37 @@ export default function Sidebar({ activeSection, onNavigate }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             className="block px-2 hover:underline"
-            style={{ color: 'var(--t-cyan)' }}
+            style={{ color: 'var(--color-cyan)' }}
           >
             linkedin ↗
           </a>
           <a
             href="mailto:kbalasundara@umass.edu"
             className="block px-2 hover:underline"
-            style={{ color: 'var(--t-cyan)' }}
+            style={{ color: 'var(--color-cyan)' }}
           >
             kiran@email.com
           </a>
         </div>
       </div>
 
-      <div className="mx-4 my-2 border-t" style={{ borderColor: 'var(--t-border)' }} />
+      <div className="mx-4 my-2 border-t" style={{ borderColor: 'var(--color-border)' }} />
 
       {/* Uptime */}
       <div className="px-4 py-2 mt-auto pb-5">
         <p
           className="text-[10px] font-semibold tracking-widest uppercase mb-2 select-none"
-          style={{ color: 'var(--t-text-dim)' }}
+          style={{ color: 'var(--color-text-dim)' }}
         >
           uptime
         </p>
         <div className="flex items-center gap-1.5 px-2">
           <span
             className="w-1.5 h-1.5 rounded-full shrink-0"
-            style={{ background: 'var(--t-green)' }}
+            style={{ background: 'var(--color-green)' }}
           />
-          <span style={{ color: 'var(--t-green)' }}>online</span>
-          <span style={{ color: 'var(--t-text-dim)' }}>· seeking &apos;26/&apos;27</span>
+          <span style={{ color: 'var(--color-green)' }}>online</span>
+          <span style={{ color: 'var(--color-text-dim)' }}>· seeking &apos;26/&apos;27</span>
         </div>
       </div>
     </aside>

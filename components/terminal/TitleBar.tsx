@@ -1,12 +1,13 @@
 interface Props {
   title: string;
+  onToggle: () => void;
 }
 
-export default function TitleBar({ title }: Props) {
+export default function TitleBar({ title, onToggle }: Props) {
   return (
     <div
       className="flex items-center justify-between px-4 h-10 shrink-0 border-b select-none"
-      style={{ background: 'var(--t-bg-secondary)', borderColor: 'var(--t-border)' }}
+      style={{ background: 'var(--color-bg-secondary)', borderColor: 'var(--color-border)' }}
     >
       {/* macOS traffic lights — fixed system colors, not theme-dependent */}
       <div className="flex items-center gap-1.5">
@@ -16,14 +17,25 @@ export default function TitleBar({ title }: Props) {
       </div>
 
       {/* Dynamic title */}
-      <span className="text-xs absolute left-1/2 -translate-x-1/2" style={{ color: 'var(--t-text-dim)' }}>
+      <span className="text-xs absolute left-1/2 -translate-x-1/2" style={{ color: 'var(--color-text-dim)' }}>
         {title}
       </span>
 
-      {/* Right slot — placeholder for recruiter view toggle */}
-      <span className="text-xs" style={{ color: 'var(--t-text-dim)' }}>
-        recruiter view ≈
-      </span>
+      <button
+        onClick={onToggle}
+        className="text-xs"
+        style={{
+          color: 'var(--color-text-dim)',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          padding: 0,
+          fontFamily: 'inherit',
+          fontSize: 'inherit',
+        }}
+      >
+        recruiter view ⇄
+      </button>
     </div>
   );
 }

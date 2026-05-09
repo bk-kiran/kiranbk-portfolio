@@ -36,8 +36,12 @@ function getTitle(section: string): string {
   return section === '~' ? 'kiran.sh — v1.0.0' : `kiran.sh — ~/${section}`;
 }
 
-export default function Terminal() {
-  const { theme } = useTheme();
+interface Props {
+  onToggleRecruiter: () => void;
+}
+
+export default function Terminal({ onToggleRecruiter }: Props) {
+  useTheme();
   const [entries, setEntries] = useState<TerminalEntry[]>([]);
   const [history, setHistory] = useState<string[]>([]);
   const [activeSection, setActiveSection] = useState('~');
@@ -45,11 +49,11 @@ export default function Terminal() {
 
   useEffect(() => {
     const welcomeOutput = (
-      <div style={{ color: 'var(--t-text-dim)' }}>
+      <div style={{ color: 'var(--color-text-dim)' }}>
         <div>Last login: {new Date().toDateString()} on ttys001</div>
         <div>
           Welcome. Type{' '}
-          <span style={{ color: 'var(--t-green)', fontWeight: 600 }}>help</span>
+          <span style={{ color: 'var(--color-green)', fontWeight: 600 }}>help</span>
           {' '}to list commands, or just read on.
         </div>
       </div>
@@ -89,26 +93,12 @@ export default function Terminal() {
     if (section !== null) setActiveSection(section);
   }
 
-  const cssVars = {
-    '--t-bg': theme.bg,
-    '--t-bg-secondary': theme.bgSecondary,
-    '--t-border': theme.border,
-    '--t-text': theme.text,
-    '--t-text-dim': theme.textDim,
-    '--t-green': theme.green,
-    '--t-cyan': theme.cyan,
-    '--t-yellow': theme.yellow,
-    '--t-magenta': theme.magenta,
-    '--t-red': theme.red,
-    '--t-prompt': theme.prompt,
-  } as React.CSSProperties;
-
   return (
     <div
       className="flex flex-col h-screen w-screen overflow-hidden font-mono text-sm"
-      style={{ ...cssVars, background: theme.bg, color: theme.text }}
+      style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}
     >
-      <TitleBar title={getTitle(activeSection)} />
+      <TitleBar title={getTitle(activeSection)} onToggle={onToggleRecruiter} />
 
       <div className="flex flex-1 overflow-hidden min-h-0">
         <Sidebar activeSection={activeSection} onNavigate={handleSubmit} />
@@ -123,9 +113,9 @@ export default function Terminal() {
               <div key={entry.id}>
                 {entry.input !== null && (
                   <div className="flex items-baseline gap-1 mb-1 select-none flex-wrap">
-                    <span style={{ color: 'var(--t-prompt)' }}>kiran.sh</span>
-                    <span style={{ color: 'var(--t-text-dim)' }}>~ $</span>
-                    <span style={{ color: 'var(--t-yellow)' }} className="ml-1">
+                    <span style={{ color: 'var(--color-prompt)' }}>kiran.sh</span>
+                    <span style={{ color: 'var(--color-text-dim)' }}>~ $</span>
+                    <span style={{ color: 'var(--color-yellow)' }} className="ml-1">
                       {entry.input}
                     </span>
                   </div>

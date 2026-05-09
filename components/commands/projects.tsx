@@ -13,7 +13,7 @@ registry.register({
 
     return (
       <div className="space-y-5">
-        <div className="text-xs" style={{ color: 'var(--t-text-dim)' }}>
+        <div className="text-xs" style={{ color: 'var(--color-text-dim)' }}>
           {'// '}{items.length} of {total} shown
           {!showAll && ' · `projects --all` for full list'}
         </div>
@@ -21,11 +21,11 @@ registry.register({
         {items.map(proj => (
           <div key={proj.id}>
             <div className="mb-1">
-              <span style={{ color: 'var(--t-text-dim)' }}>{'📁 '}</span>
-              <span style={{ color: 'var(--t-cyan)', fontWeight: 600 }}>{proj.name}</span>
+              <span style={{ color: 'var(--color-text-dim)' }}>{'📁 '}</span>
+              <span style={{ color: 'var(--color-cyan)', fontWeight: 600 }}>{proj.name}</span>
             </div>
 
-            <p className="text-xs mb-2" style={{ color: 'var(--t-text)' }}>
+            <p className="text-xs mb-2" style={{ color: 'var(--color-text)' }}>
               {proj.description}
             </p>
 
@@ -35,8 +35,8 @@ registry.register({
                   key={t}
                   className="text-xs px-1.5 py-0.5"
                   style={{
-                    color: 'var(--t-text-dim)',
-                    border: '1px solid var(--t-border)',
+                    color: 'var(--color-text-dim)',
+                    border: '1px solid var(--color-border)',
                     borderRadius: '3px',
                   }}
                 >
@@ -46,7 +46,7 @@ registry.register({
             </div>
 
             {proj.metrics && (
-              <div className="text-xs mb-1.5" style={{ color: 'var(--t-text-dim)' }}>
+              <div className="text-xs mb-1.5" style={{ color: 'var(--color-text-dim)' }}>
                 {proj.metrics}
               </div>
             )}
@@ -56,7 +56,7 @@ registry.register({
                 href={proj.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: 'var(--t-yellow)' }}
+                style={{ color: 'var(--color-yellow)' }}
                 className="hover:underline"
               >
                 github ↗
@@ -66,7 +66,7 @@ registry.register({
                   href={proj.demo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ color: 'var(--t-yellow)' }}
+                  style={{ color: 'var(--color-yellow)' }}
                   className="hover:underline"
                 >
                   demo ↗

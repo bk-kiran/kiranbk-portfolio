@@ -26,7 +26,7 @@ export const themes: Record<ThemeName, Theme> = {
     yellow: '#e0af68',
     magenta: '#bb9af7',
     red: '#f7768e',
-    prompt: '#7aa2f7',
+    prompt: '#9ece6a',
   },
   solarized: {
     bg: '#002b36',
@@ -39,34 +39,52 @@ export const themes: Record<ThemeName, Theme> = {
     yellow: '#b58900',
     magenta: '#d33682',
     red: '#dc322f',
-    prompt: '#268bd2',
+    prompt: '#859900',
   },
   nord: {
     bg: '#2e3440',
     bgSecondary: '#3b4252',
     border: '#4c566a',
-    text: '#eceff4',
-    textDim: '#d8dee9',
+    text: '#d8dee9',
+    textDim: '#616e88',
     green: '#a3be8c',
     cyan: '#88c0d0',
     yellow: '#ebcb8b',
     magenta: '#b48ead',
     red: '#bf616a',
-    prompt: '#81a1c1',
+    prompt: '#a3be8c',
   },
   paper: {
-    bg: '#f5f0e8',
-    bgSecondary: '#ede8e0',
-    border: '#c8c0b0',
-    text: '#2c2c2c',
-    textDim: '#6b6b6b',
-    green: '#2d6a2d',
-    cyan: '#0a6b6b',
-    yellow: '#8b6914',
-    magenta: '#7b2d7b',
-    red: '#a01010',
-    prompt: '#1a4a8a',
+    bg: '#f2ede4',
+    bgSecondary: '#e8e0d0',
+    border: '#c9b99a',
+    text: '#282828',
+    textDim: '#7c6f64',
+    green: '#427b58',
+    cyan: '#076678',
+    yellow: '#b57614',
+    magenta: '#8f3f71',
+    red: '#9d0006',
+    prompt: '#427b58',
   },
 };
 
 export const DEFAULT_THEME: ThemeName = 'tokyonight';
+
+export const THEME_CHANGE_EVENT = 'portfolio:theme-change';
+
+export function applyThemeVars(theme: Theme): void {
+  if (typeof document === 'undefined') return;
+  const r = document.documentElement;
+  r.style.setProperty('--color-bg', theme.bg);
+  r.style.setProperty('--color-bg-secondary', theme.bgSecondary);
+  r.style.setProperty('--color-border', theme.border);
+  r.style.setProperty('--color-text', theme.text);
+  r.style.setProperty('--color-text-dim', theme.textDim);
+  r.style.setProperty('--color-green', theme.green);
+  r.style.setProperty('--color-cyan', theme.cyan);
+  r.style.setProperty('--color-yellow', theme.yellow);
+  r.style.setProperty('--color-magenta', theme.magenta);
+  r.style.setProperty('--color-red', theme.red);
+  r.style.setProperty('--color-prompt', theme.prompt);
+}

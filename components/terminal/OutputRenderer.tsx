@@ -10,7 +10,7 @@ export default function OutputRenderer({ output }: Props) {
     return (
       <div
         className="whitespace-pre-wrap leading-relaxed"
-        style={{ color: isError ? 'var(--t-red)' : 'var(--t-text-dim)' }}
+        style={{ color: isError ? 'var(--color-red)' : 'var(--color-text-dim)' }}
       >
         {output}
       </div>
