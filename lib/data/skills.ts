@@ -1,0 +1,38 @@
+export const skills = {
+  languages: [
+    { name: "Python", icon: "python" },
+    { name: "TypeScript", icon: "typescript" },
+    { name: "JavaScript", icon: "javascript" },
+    { name: "Java", icon: "java" },
+    { name: "Dart", icon: "dart" },
+    { name: "C", icon: "c" },
+    { name: "SQL", icon: "sql" },
+  ],
+  frameworks: [
+    { name: "React", icon: "react" },
+    { name: "Next.js", icon: "nextjs" },
+    { name: "Spring Boot", icon: "springboot" },
+    { name: "Node.js", icon: "nodejs" },
+    { name: "Flutter", icon: "flutter" },
+    { name: "FastAPI", icon: "fastapi" },
+    { name: "Express", icon: "express" },
+  ],
+  infra: [
+    { name: "AWS", icon: "aws" },
+    { name: "Docker", icon: "docker" },
+    { name: "Firebase", icon: "firebase" },
+    { name: "Supabase", icon: "supabase" },
+    { name: "PostgreSQL", icon: "postgresql" },
+    { name: "MongoDB", icon: "mongodb" },
+    { name: "Convex", icon: "convex" },
+    { name: "Vercel", icon: "vercel" },
+  ],
+  aiml: [
+    { name: "PyTorch", icon: "pytorch" },
+    { name: "TensorFlow", icon: "tensorflow" },
+    { name: "scikit-learn", icon: "scikitlearn" },
+    { name: "LangGraph", icon: "langgraph" },
+    { name: "Claude", icon: "anthropic" },
+    { name: "HuggingFace", icon: "huggingface" },
+  ],
+}
