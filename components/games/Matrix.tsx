@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from 'react';
 
-const APP_EXIT_EVENT = 'portfolio:app-exit';
-
 const CHARS =
   'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン' +
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -29,7 +27,11 @@ interface Particle {
   char: string;
 }
 
-export default function Matrix() {
+interface Props { onExit: () => void }
+
+export default function Matrix({ onExit }: Props) {
+  const onExitRef = useRef(onExit);
+  useEffect(() => { onExitRef.current = onExit; });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const activeRef = useRef(true);
   const exitingRef = useRef(false);
@@ -112,7 +114,7 @@ export default function Matrix() {
       // Dispatch exit after particles fade
       if (exitingRef.current && particlesRef.current.length === 0) {
         activeRef.current = false;
-        window.dispatchEvent(new CustomEvent(APP_EXIT_EVENT));
+        onExitRef.current();
         return;
       }
 
@@ -122,7 +124,7 @@ export default function Matrix() {
     frameId = requestAnimationFrame(animate);
 
     function onKey(e: KeyboardEvent) {
-      if (exitingRef.current) return;
+      if (exitingRef.current || e.key === 'Escape') return; // the terminal handles Esc directly
       if (!e.ctrlKey && !e.metaKey) e.preventDefault();
 
       exitingRef.current = true;
@@ -152,18 +154,18 @@ export default function Matrix() {
   }, []);
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
+    <div style={{ position: 'relative', padding: 12, background: '#0a0a0a' }}>
       <canvas
         ref={canvasRef}
-        width={680}
-        height={280}
-        style={{ background: '#000', display: 'block', borderRadius: '4px' }}
+        width={736}
+        height={320}
+        style={{ background: '#000', display: 'block', borderRadius: '4px', width: '100%', height: 'auto' }}
       />
       <div
         style={{
           position: 'absolute',
-          bottom: 10,
-          right: 14,
+          bottom: 22,
+          right: 26,
           color: 'rgba(0, 180, 0, 0.5)',
           fontSize: 11,
           fontFamily: 'monospace',

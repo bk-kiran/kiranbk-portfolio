@@ -1,0 +1,51 @@
+{
+  "docs": [
+    {
+      "source": "about.md",
+      "chunks": 1
+    },
+    {
+      "source": "experience.md",
+      "chunks": 6
+    },
+    {
+      "source": "projects/dopamine-drop.md",
+      "chunks": 1
+    },
+    {
+      "source": "projects/studylens-ai.md",
+      "chunks": 1
+    },
+    {
+      "source": "projects/kapok.md",
+      "chunks": 1
+    },
+    {
+      "source": "projects/worldcup-predictor.md",
+      "chunks": 1
+    },
+    {
+      "source": "projects/keepo.md",
+      "chunks": 1
+    },
+    {
+      "source": "projects/whatsapp-analyzer.md",
+      "chunks": 1
+    },
+    {
+      "source": "education.md",
+      "chunks": 8
+    },
+    {
+      "source": "skills.md",
+      "chunks": 1
+    },
+    {
+      "source": "resume.pdf",
+      "chunks": 8
+    }
+  ],
+  "totalChunks": 30,
+  "embedModel": "voyage-3-lite",
+  "updatedAt": "2026-09-28T22:54:53.960Z"
+}

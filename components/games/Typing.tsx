@@ -2,20 +2,31 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-const PASSAGES = [
-  'the quick brown fox jumps over the lazy dog',
-  'a software engineer writes code that speaks without words',
-  'pack my box with five dozen liquor jugs',
-  'type fast but always think before you build',
-  'good code is its own best documentation',
-  'simplicity is the ultimate sophistication in software design',
-  'every great developer you know got there by solving problems',
-  'move fast and build things that actually matter',
-  'the best error message is the one that never shows up',
-  'first make it work then make it right then make it fast',
+const QUOTES = [
+  { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
+  { text: "The way to get startup ideas is to look for problems, preferably problems you have yourself.", author: "Paul Graham" },
+  { text: "The most dangerous phrase in the language is: we've always done it this way.", author: "Grace Hopper" },
+  { text: "Premature optimization is the root of all evil.", author: "Donald Knuth" },
+  { text: "Simplicity is prerequisite for reliability.", author: "Edsger Dijkstra" },
+  { text: "Concurrency is not parallelism.", author: "Rob Pike" },
+  { text: "Make it work, make it right, make it fast.", author: "Kent Beck" },
+  { text: "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.", author: "Brian Kernighan" },
+  { text: "The best way to predict the future is to invent it.", author: "Alan Kay" },
+  { text: "Most of you are familiar with the virtues of a programmer: laziness, impatience, and hubris.", author: "Larry Wall" },
+  { text: "The hottest new programming language is English.", author: "Andrej Karpathy" },
+  { text: "Software 2.0 is code written by optimization rather than by humans.", author: "Andrej Karpathy" },
+  { text: "Optimize for happiness.", author: "David Heinemeier Hansson" },
+  { text: "Build something people want. Ship it. Iterate.", author: "Pieter Levels" },
+  { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" },
+  { text: "Programs must be written for people to read, and only incidentally for machines to execute.", author: "Harold Abelson" },
+  { text: "I designed Ruby to make programmers happy.", author: "Yukihiro Matsumoto" },
+  { text: "The bearing of a child takes nine months, no matter how many women are assigned. Many software tasks have this same character.", author: "Fred Brooks" },
+  { text: "Measuring programming progress by lines of code is like measuring aircraft building progress by weight.", author: "Bill Gates" },
+  { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
 ];
 
-const pick = () => PASSAGES[Math.floor(Math.random() * PASSAGES.length)];
+type Quote = (typeof QUOTES)[number];
+const pick = (): Quote => QUOTES[Math.floor(Math.random() * QUOTES.length)];
 
 function calcWpm(chars: number, ms: number) {
   return ms < 500 ? 0 : Math.round((chars / 5) / (ms / 60000));
@@ -25,7 +36,8 @@ type Phase = 'idle' | 'typing' | 'done';
 interface Props { onExit: () => void }
 
 export default function Typing({ onExit }: Props) {
-  const [passage, setPassage] = useState(pick);
+  const [quote,   setQuote]   = useState(pick);
+  const passage = quote.text;
   const [typed,   setTyped]   = useState('');
   const [errors,  setErrors]  = useState(0);
   const [phase,   setPhase]   = useState<Phase>('idle');
@@ -43,7 +55,7 @@ export default function Typing({ onExit }: Props) {
   const restart = useCallback(() => {
     stopTimer();
     startRef.current = null;
-    setPassage(pick());
+    setQuote(q => { let n = pick(); while (n === q) n = pick(); return n; });
     setTyped('');
     setErrors(0);
     setPhase('idle');
@@ -141,6 +153,10 @@ export default function Typing({ onExit }: Props) {
             </span>
           );
         })}
+      </div>
+
+      <div style={{ alignSelf: 'flex-end', fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>
+        — {quote.author}
       </div>
 
       {phase === 'done' ? (
