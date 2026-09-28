@@ -121,9 +121,7 @@ export default function Home() {
             lineHeight: 1.85,
             marginBottom: 40,
           }}>
-            CS Honors student at UMass Amherst, graduating May 2027. I build full-stack systems,
-            AI/ML pipelines, and anything in between — from agentic backends to consumer-facing
-            products.
+            A CS Honors student at UMass Amherst (May '27) who builds full-stack systems and AI/ML pipelines from agentic backends to consumer-facing products. I've shipped demand-forecasting pipelines, real-time messaging at scale, and AI-powered learning tools.
           </p>
 
           <p style={{

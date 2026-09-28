@@ -74,6 +74,17 @@ export const education: Education[] = [
       },
 
       {
+        name: 'Researcher @ CIIR',
+        link: 'https://ciir.cs.umass.edu/',
+        logo: 'R',
+        logoImg: '/cics.jpeg',
+        logoColor: '#0369a1',
+        logoBg: '#dbeafe',
+        period: 'Sep 2026 – Present',
+        description: 'Research at the Center of Intelligent Information Retrieval',
+      },
+
+      {
         name: 'Teaching Assistant',
         logo: 'TA',
         logoImg: '/cics.jpg',
@@ -83,8 +94,8 @@ export const education: Education[] = [
         description: 'Graded quizzes, held weekly office hours, and answered questions on Piazza, helping 300+ students master core programming concepts.',
         courses: [
           'Software Engineering (Fall 2026)',
+          'Data Management (Spring 2026)',
           'Computer Systems (Fall 2025)',
-          'Data Management (Spring 2025)',
           'Python Programming (Spring 2025)',
         ],
       },

@@ -1,48 +1,8 @@
 'use client';
 
 import { experience } from '@/lib/data/experience';
-import { skills } from '@/lib/data/skills';
+import { skills, techLogos } from '@/lib/data/skills';
 import SectionHeader from '@/components/ui/SectionHeader';
-
-const TECH_LOGOS: Record<string, string> = {
-  'Python': '/python.png',
-  'JavaScript': '/js.png',
-  'Java': '/java.png',
-  'C': '/C_Logo.png',
-  'CSS': '/css.png',
-  'HTML': '/html.png',
-  'React': '/react.png',
-  'Next.js': '/nextjs.svg',
-  'Node.js': '/nodejs.webp',
-  'FastAPI': '/fastapi.svg',
-  'Tailwind': '/tailwind.png',
-  'AWS': '/aws.png',
-  'Azure': '/azure.png',
-  'MongoDB': '/mongodb.png',
-  'PostgreSQL': '/psql.png',
-  'SQL': '/sql.png',
-  'Supabase': '/supabase.png',
-  'Git': '/git.png',
-  'PyTorch': '/pytorch.png',
-  'TensorFlow': '/tf.png',
-  'Hugging Face': '/hf.png',
-  'HuggingFace': '/hf.png',
-  'Keras': '/keras.png',
-  'TypeScript': '/ts.png',
-  'Dart': '/dart.png',
-  'Spring Boot': '/spring.png',
-  "Flutter": '/flutter.png',
-  "Express": '/express.png',
-  "Docker": '/docker.png',
-  "Firebase": '/firebase.png',
-  "Convex": '/convex.webp',
-  "Vercel": '/vercel.webp',
-  "scikit-learn": '/sl.png',
-  "LangGraph": '/lg.png',
-  "Claude": '/claude.png'
-
-
-};
 
 const CHIP_COLORS: Record<string, string> = {
   'Python': '#3776AB',
@@ -236,7 +196,7 @@ function ExperienceCard({ item }: { item: ExperienceItem }) {
       {/* Tech chips / logos */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
         {item.tags.map((tag) => {
-          const logo = TECH_LOGOS[tag];
+          const logo = techLogos[tag];
           return logo ? (
             <span key={tag} title={tag} style={{
               display: 'inline-flex',
@@ -307,7 +267,7 @@ export default function Experience() {
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {items.map((skill) => {
-                  const logo = TECH_LOGOS[skill.name];
+                  const logo = techLogos[skill.name];
                   return logo ? (
                     <div key={skill.name} title={skill.name} style={{
                       display: 'flex',

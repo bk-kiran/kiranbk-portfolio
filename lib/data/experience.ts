@@ -1,10 +1,25 @@
 export const experience = [
   {
+    id: "acnodal",
+    company: "Acnodal",
+    role: "Open Source Contributer",
+    period: "June 2026 – Present",
+    logo: "Ac",
+    logoImg: "/acnodal.jpeg",
+    logoColor: "green",
+    logoBg: "green",
+    bullets: [
+      "soon",
+    ],
+    tags: ["LangGraph", "Claude Sonnet", "TypeScript", "EdTech"],
+  },
+
+  {
     id: "aubot",
     company: "Aubot",
     role: "Software Engineer Intern",
     location: "Remote",
-    period: "May 2026 – Present",
+    period: "May 2026 – August 2026",
     logo: "Au",
     logoImg: "/aubot.jpeg",
     logoColor: "spacegray",
@@ -18,7 +33,7 @@ export const experience = [
   {
     id: "alterea",
     company: "Alterea",
-    role: "Software Developer (Part-time)",
+    role: "Software Developer",
     location: "Remote",
     period: "Jan 2026 – May 2026",
     logo: "A",
@@ -26,10 +41,9 @@ export const experience = [
     logoColor: "#7c3aed",
     logoBg: "#ede9fe",
     bullets: [
-      "Building Agents of Influence — an AI-powered educational game platform",
-      "Redesigned the Analysis modal UI, improving data visualization clarity for game session insights",
-      "Conducted QA testing for Arcade Mode Conversation missions, identifying and documenting bugs across agent dialogue flows",
-      "Collaborating on agentic pipeline architecture for multi-turn educational conversations",
+      "Improved readability of AI-generated session insights for teachers on Agents of Influence, an AI media literacy game, by rebuilding the performance analysis modal with React as a popup with collapsible skill breakdowns",
+      "Restored correct behavior across classroom and account flows by resolving 10+ bugs in the frontend and Firebase backend, including form validation that wrongly required email consent and student-account display errors",
+      "Helped build the agentic pipeline behind multi-turn educational conversations",
     ],
     tags: ["LangGraph", "Claude Sonnet", "TypeScript", "EdTech"],
   },
@@ -44,13 +58,11 @@ export const experience = [
     logoColor: "#0369a1",
     logoBg: "#e0f2fe",
     bullets: [
-      "Shipped demand forecasting pipeline with Python, scikit-learn, AWS — 82% SKU prediction accuracy",
-      "Engineered React + Spring Boot microservice architecture, reducing quotation turnaround by 30%",
-      "Deployed Dockerized Node.js microservices benchmarking 10K+ SKUs, cutting scraping runtime by 40%",
-      "Scaled systems with CI/CD pipelines for 5K+ daily users, improving uptime from 95% to 99%",
+      "Replaced the purchasing team’s manual reorder estimates by building a demand forecasting model with scikit-learn on 10 years of sales history across 5,000+ SKUs for UK/US clients which was adopted by purchasing and sales",
+      "Cut OEM quote turnaround from 1–2 days to same-day by developing an internal React and Spring Boot quotation tool consolidating BOM costs, pricing across 55 suppliers, and production lead times into one interface",
+      "Replaced manual weekly competitor price lookups with automated daily refreshes by writing Dockerized Node.js scrapers on AWS tracking ∼ 1,000 SKUs across 6 sites, structuring output for procurement benchmarking",
     ],
     tags: ["Python", "scikit-learn", "AWS", "React", "Spring Boot", "Docker"],
-    metrics: ["+82% accuracy", "-$20K storage", "-15% overstock"],
   },
   {
     id: "trubridge",
@@ -63,12 +75,11 @@ export const experience = [
     logoColor: "#0f766e",
     logoBg: "#ccfbf1",
     bullets: [
-      "Multivariate analysis on 50K+ healthcare records via pandas, NumPy, SQLAlchemy",
-      "Modeled hospital readmission rates with logistic regression + OLS, identifying high-impact predictors (p ≤ 0.01)",
-      "Owned end-to-end ETL on AWS Lambda + S3, reducing preprocessing runtime by 35%",
+      "Scoped readmission modeling by analyzing 50K+ clinical records across hospital systems with pandas and SQLAlchemy, profiling relationships between readmissions and infection-control metrics to select predictors",
+      "Identified significant readmission predictors (p ≤ 0.01), including length of stay and prior infection incidents, by modeling readmission rates against infection-control KPIs with logistic regression and OLS in statsmodels",
+      "Cut clinical-record preprocessing from ∼ 20 minutes to under 5 by rewriting row-wise pandas operations as vectorized transforms in the AWS Lambda and S3 ETL pipeline, adding error logging for failed ingestion runs",
     ],
     tags: ["Python", "pandas", "NumPy", "AWS", "SQL", "ETL"],
-    metrics: ["50K+ records", "-35% runtime"],
   },
   {
     id: "zyntra",
@@ -80,11 +91,10 @@ export const experience = [
     logoColor: "#b45309",
     logoBg: "#fef3c7",
     bullets: [
-      "Launched real-time distributed messaging with React, Node.js, MongoDB, Socket.IO for 2K+ concurrent users",
-      "Integrated REST + GraphQL APIs, reducing render failures and API issues by 35%",
-      "Implemented JWT auth with token refresh, cutting auth-related errors by 60%",
+      "Built real-time messaging with React, Node.js, MongoDB, and Socket.IO for 2K+ concurrent users",
+      "Integrated REST and GraphQL APIs, reducing render failures and response issues by 35%",
+      "Added JWT auth with token refresh and session expiry, cutting auth errors by 60%.",
     ],
     tags: ["React", "Node.js", "MongoDB", "Socket.IO", "GraphQL", "JWT"],
-    metrics: ["2K+ concurrent users", "-60% auth errors"],
   },
 ]

@@ -1,62 +1,43 @@
 'use client';
 
 import { useState, useEffect, useRef, KeyboardEvent } from 'react';
+import Wordle from '@/components/games/Wordle';
+import Typing from '@/components/games/Typing';
+import Snake from '@/components/games/Snake';
 
 type Line = { type: 'input' | 'output' | 'error' | 'dim'; text: string };
 
 const BOOT: Line[] = [
-  { type: 'dim',    text: 'kiranbk.com — interactive shell' },
-  { type: 'dim',    text: "type 'help' for commands" },
+  { type: 'dim', text: 'kiranbk.com — interactive shell' },
+  { type: 'dim', text: "type 'help' for commands" },
 ];
 
-const CMDS: Record<string, () => Line[]> = {
-  help: () => [
-    { type: 'output', text: 'commands:' },
-    { type: 'output', text: '  about       — who I am' },
-    { type: 'output', text: '  experience  — work history' },
-    { type: 'output', text: '  projects    — what I\'ve built' },
-    { type: 'output', text: '  skills      — tech stack' },
-    { type: 'output', text: '  contact     — get in touch' },
-    { type: 'output', text: '  clear       — clear screen' },
-    { type: 'output', text: '  exit        — close terminal' },
-  ],
-  about: () => [
-    { type: 'output', text: 'Kiran BK — Software Engineer + AI/ML' },
-    { type: 'output', text: 'Honors CS @ UMass Amherst, Class of 2027' },
-    { type: 'dim',    text: 'Building systems at the seam of engineering and applied AI.' },
-    { type: 'dim',    text: 'Open to Summer 2026 internships.' },
-  ],
-  experience: () => [
-    { type: 'output', text: 'Alterea            Software Developer       Jan 2026–Present' },
-    { type: 'output', text: 'LeeYuen Housewares  SWE Intern               Jun–Aug 2025' },
-    { type: 'output', text: 'TruBridge          Data Science Intern       Dec 2024–Feb 2025' },
-    { type: 'output', text: 'Zyntra.io          SWE Intern               Jul–Aug 2024' },
-    { type: 'output', text: 'BUILD UMass        SWE + Treasurer          Sep 2024–Present' },
-  ],
-  projects: () => [
-    { type: 'output', text: 'Dopamine Drop       Canvas LMS gamification — convex + next.js' },
-    { type: 'output', text: 'StudyLens AI        RAG study platform — openai + next.js' },
-    { type: 'output', text: 'Kapok               Offline disaster relief — flutter + firebase' },
-    { type: 'output', text: 'WC 2026 Predictor   ML pipeline — xgboost + monte carlo' },
-    { type: 'output', text: 'Keepo               AI receipt tracker — dual LLM agents' },
-  ],
-  skills: () => [
-    { type: 'dim',    text: 'Languages:' },
-    { type: 'output', text: '  Python  TypeScript  Java  Dart  C  SQL' },
-    { type: 'dim',    text: 'Frameworks:' },
-    { type: 'output', text: '  React  Next.js  Spring Boot  Flutter  FastAPI' },
-    { type: 'dim',    text: 'Infra:' },
-    { type: 'output', text: '  AWS  Docker  Firebase  PostgreSQL  MongoDB  Convex' },
-    { type: 'dim',    text: 'AI/ML:' },
-    { type: 'output', text: '  PyTorch  LangGraph  Claude API  OpenAI  scikit-learn' },
-  ],
-  contact: () => [
-    { type: 'output', text: 'email     kiranbk1704@gmail.com' },
-    { type: 'output', text: 'github    github.com/bk-kiran' },
-    { type: 'output', text: 'linkedin  linkedin.com/in/bk-kiran' },
-    { type: 'output', text: 'web       kiranbk.com' },
-  ],
-};
+type AppKey = 'wordle' | 'typing' | 'snake';
+
+const APPS: { key: AppKey; label: string }[] = [
+  { key: 'wordle', label: 'wordle' },
+  { key: 'typing', label: 'type test' },
+  { key: 'snake', label: 'snake' },
+];
+
+const STORAGE_LINES = 'terminal-lines';
+const STORAGE_HISTORY = 'terminal-history';
+
+function loadLines(): Line[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_LINES);
+    if (raw) return JSON.parse(raw) as Line[];
+  } catch { }
+  return BOOT;
+}
+
+function loadHistory(): string[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_HISTORY);
+    if (raw) return JSON.parse(raw) as string[];
+  } catch { }
+  return [];
+}
 
 interface Props { onClose: () => void }
 
@@ -65,45 +46,123 @@ export default function Terminal({ onClose }: Props) {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState(-1);
+  const [ready, setReady] = useState(false);
+  const [activeGame, setActiveGame] = useState<AppKey | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { inputRef.current?.focus(); }, []);
+  useEffect(() => {
+    setLines(loadLines());
+    setHistory(loadHistory());
+    setReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+    localStorage.setItem(STORAGE_LINES, JSON.stringify(lines));
+  }, [lines, ready]);
+
+  useEffect(() => {
+    if (!ready) return;
+    localStorage.setItem(STORAGE_HISTORY, JSON.stringify(history));
+  }, [history, ready]);
+
+  useEffect(() => {
+    if (!activeGame) inputRef.current?.focus();
+  }, [activeGame]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [lines]);
 
-  // ESC key closes
   useEffect(() => {
     const handler = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        if (activeGame) setActiveGame(null);
+        else onClose();
+      }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [onClose]);
+  }, [onClose, activeGame]);
 
   function run(raw: string) {
-    const cmd = raw.trim().toLowerCase();
-    const echo: Line = { type: 'input', text: `> ${raw}` };
+    const trimmed = raw.trim();
+    const lower = trimmed.toLowerCase();
+    const echo: Line = { type: 'input', text: `> ${trimmed}` };
 
-    if (!cmd) { setLines(l => [...l, echo]); setInput(''); return; }
+    if (!trimmed) { setLines(l => [...l, echo]); setInput(''); return; }
 
-    if (cmd === 'clear') {
+    if (lower === 'clear') {
       setLines(BOOT);
+      localStorage.setItem(STORAGE_LINES, JSON.stringify(BOOT));
       setInput('');
-      setHistory(h => [raw, ...h]);
+      setHistory(h => [trimmed, ...h]);
       setHistIdx(-1);
       return;
     }
-    if (cmd === 'exit') { onClose(); return; }
 
-    const result: Line[] = CMDS[cmd]
-      ? CMDS[cmd]()
-      : [{ type: 'error', text: `command not found: ${cmd}. try 'help'` }];
+    if (lower === 'exit') { onClose(); return; }
+
+    let result: Line[];
+
+    if (lower === 'help') {
+      result = [
+        { type: 'output', text: 'commands:' },
+        { type: 'output', text: '  ask <question>  — ask the RAG bot anything about me' },
+        { type: 'output', text: '  apps            — list mini apps' },
+        { type: 'output', text: '  run <app>       — launch a mini app' },
+        { type: 'output', text: '  contact         — get in touch' },
+        { type: 'output', text: '  clear           — clear screen' },
+        { type: 'output', text: '  exit            — close terminal' },
+      ];
+
+    } else if (lower === 'contact') {
+      result = [
+        { type: 'output', text: 'email     kiranbk1704@gmail.com' },
+        { type: 'output', text: 'github    github.com/bk-kiran' },
+        { type: 'output', text: 'linkedin  linkedin.com/in/bk-kiran' },
+        { type: 'output', text: 'web       kiranbk.com' },
+      ];
+
+    } else if (lower === 'apps') {
+      result = [
+        { type: 'output', text: 'mini apps:' },
+        ...APPS.map(a => ({ type: 'output' as const, text: `  ${a.key.padEnd(10)} — ${a.label}` })),
+        { type: 'dim', text: "use 'run <app>' to launch" },
+      ];
+
+    } else if (lower.startsWith('ask ')) {
+      const question = trimmed.slice(4).trim();
+      if (!question) {
+        result = [{ type: 'error', text: 'usage: ask <question>' }];
+      } else {
+        result = [
+          { type: 'dim', text: 'thinking...' },
+          { type: 'output', text: 'RAG bot coming soon — will answer: "' + question + '"' },
+        ];
+      }
+
+    } else if (lower.startsWith('run ')) {
+      const key = lower.slice(4).trim() as AppKey;
+      const app = APPS.find(a => a.key === key);
+      if (!app) {
+        const known = APPS.map(a => a.key).join(', ');
+        result = [
+          { type: 'error', text: `unknown app: ${key}` },
+          { type: 'dim', text: `available: ${known}` },
+        ];
+      } else {
+        result = [{ type: 'dim', text: `launching ${app.label}… (esc to return)` }];
+        setTimeout(() => setActiveGame(app.key), 80);
+      }
+
+    } else {
+      result = [{ type: 'error', text: `command not found: ${lower}. try 'help'` }];
+    }
 
     setLines(l => [...l, echo, ...result]);
-    setHistory(h => [raw, ...h]);
+    setHistory(h => [trimmed, ...h]);
     setHistIdx(-1);
     setInput('');
   }
@@ -126,9 +185,14 @@ export default function Terminal({ onClose }: Props) {
 
   const lineColor = (t: Line['type']) =>
     t === 'input' ? 'rgba(255,255,255,0.75)'
-    : t === 'error' ? '#f87171'
-    : t === 'dim'   ? 'rgba(255,255,255,0.35)'
-    : '#4ade80';
+      : t === 'error' ? '#f87171'
+        : t === 'dim' ? 'rgba(255,255,255,0.35)'
+          : '#4ade80';
+
+  const GameComponent =
+    activeGame === 'wordle' ? Wordle :
+      activeGame === 'typing' ? Typing :
+        activeGame === 'snake' ? Snake : null;
 
   return (
     <div
@@ -165,10 +229,12 @@ export default function Terminal({ onClose }: Props) {
             fontSize: 12, fontFamily: 'monospace',
             color: 'rgba(255,255,255,0.4)', letterSpacing: '0.02em',
           }}>
-            kiran@portfolio — zsh
+            {activeGame
+              ? `kiran@portfolio — ${APPS.find(a => a.key === activeGame)?.label}`
+              : 'kiran@portfolio — zsh'}
           </span>
           <button
-            onClick={onClose}
+            onClick={activeGame ? () => setActiveGame(null) : onClose}
             style={{
               background: 'rgba(255,255,255,0.06)',
               border: '1px solid rgba(255,255,255,0.1)',
@@ -182,56 +248,65 @@ export default function Terminal({ onClose }: Props) {
           </button>
         </div>
 
-        {/* Output */}
-        <div
-          onClick={() => inputRef.current?.focus()}
-          style={{
-            flex: 1, overflowY: 'auto',
-            padding: '18px 20px 4px',
-            cursor: 'text',
-            minHeight: 260, maxHeight: 380,
-          }}
-        >
-          {lines.map((line, i) => (
-            <div key={i} style={{
-              fontFamily: "'Courier New', monospace",
-              fontSize: 13, lineHeight: '22px',
-              color: lineColor(line.type),
-              whiteSpace: 'pre',
-            }}>
-              {line.text}
+        {/* Game view */}
+        {GameComponent ? (
+          <div style={{ minHeight: 320, display: 'flex', flexDirection: 'column' }}>
+            <GameComponent onExit={() => setActiveGame(null)} />
+          </div>
+        ) : (
+          <>
+            {/* Terminal output */}
+            <div
+              onClick={() => inputRef.current?.focus()}
+              style={{
+                flex: 1, overflowY: 'auto',
+                padding: '18px 20px 4px',
+                cursor: 'text',
+                minHeight: 260, maxHeight: 380,
+              }}
+            >
+              {lines.map((line, i) => (
+                <div key={i} style={{
+                  fontFamily: "'Courier New', monospace",
+                  fontSize: 13, lineHeight: '22px',
+                  color: lineColor(line.type),
+                  whiteSpace: 'pre',
+                }}>
+                  {line.text}
+                </div>
+              ))}
+              <div ref={bottomRef} />
             </div>
-          ))}
-          <div ref={bottomRef} />
-        </div>
 
-        {/* Input row */}
-        <div style={{
-          padding: '6px 20px 16px',
-          display: 'flex', alignItems: 'center', gap: 8,
-        }}>
-          <span style={{
-            color: '#4ade80', fontFamily: "'Courier New', monospace",
-            fontSize: 13, flexShrink: 0, userSelect: 'none',
-          }}>
-            &gt;
-          </span>
-          <input
-            ref={inputRef}
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={handleKey}
-            autoComplete="off"
-            spellCheck={false}
-            style={{
-              flex: 1, background: 'none',
-              border: 'none', outline: 'none',
-              color: 'rgba(255,255,255,0.8)',
-              fontFamily: "'Courier New', monospace",
-              fontSize: 13, caretColor: '#4ade80',
-            }}
-          />
-        </div>
+            {/* Input row */}
+            <div style={{
+              padding: '6px 20px 16px',
+              display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              <span style={{
+                color: '#4ade80', fontFamily: "'Courier New', monospace",
+                fontSize: 13, flexShrink: 0, userSelect: 'none',
+              }}>
+                &gt;
+              </span>
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKey}
+                autoComplete="off"
+                spellCheck={false}
+                style={{
+                  flex: 1, background: 'none',
+                  border: 'none', outline: 'none',
+                  color: 'rgba(255,255,255,0.8)',
+                  fontFamily: "'Courier New', monospace",
+                  fontSize: 13, caretColor: '#4ade80',
+                }}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
