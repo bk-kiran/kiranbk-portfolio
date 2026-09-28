@@ -1,7 +1,7 @@
 import About from '@/components/sections/About';
 import Experience from '@/components/sections/Experience';
 import Projects from '@/components/sections/Projects';
-import type { Tab } from '@/app/page';
+type Tab = 'about' | 'experience' | 'projects';
 
 interface MainContentProps {
   activeTab: Tab;

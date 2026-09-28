@@ -2,11 +2,29 @@
 
 import { useCallback, useEffect, useRef, useState, ReactNode } from 'react';
 
-const COLS = 20, ROWS = 16, CELL = 16, SPEED = 130;
+const COLS = 20, ROWS = 16, CELL = 16;
+const BASE_SPEED = 140, MIN_SPEED = 70;
+const LEADERBOARD_KEY = 'snake-leaderboard';
 type Pt = { x: number; y: number };
 type Dir = 'U' | 'D' | 'L' | 'R';
 const OPP: Record<Dir, Dir> = { U: 'D', D: 'U', L: 'R', R: 'L' };
-const KEY: Record<string, Dir> = { ArrowUp: 'U', ArrowDown: 'D', ArrowLeft: 'L', ArrowRight: 'R' };
+const KEY: Record<string, Dir> = {
+  ArrowUp: 'U', ArrowDown: 'D', ArrowLeft: 'L', ArrowRight: 'R',
+  w: 'U', s: 'D', a: 'L', d: 'R', W: 'U', S: 'D', A: 'L', D: 'R',
+};
+
+// Speeds up every 5 food.
+const speedFor = (score: number) => Math.max(MIN_SPEED, BASE_SPEED - Math.floor(score / 5) * 10);
+
+interface Entry { score: number; date: string }
+
+function loadBoard(): Entry[] {
+  try {
+    const raw = localStorage.getItem(LEADERBOARD_KEY);
+    if (raw) return JSON.parse(raw) as Entry[];
+  } catch { }
+  return [];
+}
 
 function randFood(snake: Pt[]): Pt {
   let p: Pt;
@@ -24,6 +42,22 @@ export default function Snake({ onExit }: Props) {
   const [score, setScore]       = useState(0);
   const [phase, setPhase]       = useState<Phase>('idle');
   const [restartKey, setRestart] = useState(0);
+  const [board, setBoard]       = useState<Entry[]>([]);
+  const [newBest, setNewBest]   = useState(false);
+  const scoreRef = useRef(0);
+
+  useEffect(() => { setBoard(loadBoard()); }, []);
+
+  const recordScore = useCallback((final: number) => {
+    if (final === 0) return;
+    const prev = loadBoard();
+    const next = [...prev, { score: final, date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) }]
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5);
+    setNewBest(final > (prev[0]?.score ?? 0));
+    setBoard(next);
+    try { localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(next)); } catch { }
+  }, []);
 
   const draw = useCallback(() => {
     const ctx = canvasRef.current?.getContext('2d');
@@ -54,14 +88,17 @@ export default function Snake({ onExit }: Props) {
     const init = [{ x: 10, y: 8 }];
     gameRef.current = { snake: init, dir: 'R', nextDir: 'R', food: { x: 15, y: 8 } };
     setScore(0);
+    scoreRef.current = 0;
+    setNewBest(false);
     draw();
   }, [restartKey, draw]);
 
-  // game tick
+  // game tick — a setTimeout chain so the speed can change as the score grows
   useEffect(() => {
     if (phase !== 'playing') return;
     let alive = true;
-    const id = setInterval(() => {
+    let id: ReturnType<typeof setTimeout>;
+    const tick = () => {
       if (!alive) return;
       const s = gameRef.current;
       s.dir = s.nextDir;
@@ -74,19 +111,23 @@ export default function Snake({ onExit }: Props) {
           s.snake.some(p => p.x === head.x && p.y === head.y)) {
         alive = false;
         setPhase('dead');
+        recordScore(scoreRef.current);
         return;
       }
       s.snake.unshift(head);
       if (head.x === s.food.x && head.y === s.food.y) {
         s.food = randFood(s.snake);
-        setScore(n => n + 1);
+        scoreRef.current += 1;
+        setScore(scoreRef.current);
       } else {
         s.snake.pop();
       }
       draw();
-    }, SPEED);
-    return () => { alive = false; clearInterval(id); };
-  }, [phase, draw]);
+      id = setTimeout(tick, speedFor(scoreRef.current));
+    };
+    id = setTimeout(tick, speedFor(scoreRef.current));
+    return () => { alive = false; clearTimeout(id); };
+  }, [phase, draw, recordScore]);
 
   // keyboard
   useEffect(() => {
@@ -111,7 +152,10 @@ export default function Snake({ onExit }: Props) {
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '12px 0 10px', gap: 8, background: '#0a0a0a' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', width: COLS * CELL, fontFamily: 'monospace', fontSize: 12 }}>
         <span style={{ color: 'rgba(255,255,255,0.3)' }}>snake</span>
-        <span style={{ color: '#4ade80' }}>score: {score}</span>
+        <span>
+          <span style={{ color: 'rgba(255,255,255,0.3)' }}>best {board[0]?.score ?? 0} · </span>
+          <span style={{ color: '#4ade80' }}>score: {score}</span>
+        </span>
       </div>
       <div style={{ position: 'relative' }}>
         <canvas ref={canvasRef} width={COLS * CELL} height={ROWS * CELL}
@@ -119,19 +163,31 @@ export default function Snake({ onExit }: Props) {
         {phase === 'idle' && (
           <Overlay>
             <span style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace', fontSize: 12 }}>
-              press arrow key to start
+              arrow keys / wasd to start
             </span>
           </Overlay>
         )}
         {phase === 'dead' && (
           <Overlay>
-            <span style={{ color: '#f87171', fontFamily: 'monospace', fontSize: 14 }}>game over</span>
+            <span style={{ color: newBest ? '#fbbf24' : '#f87171', fontFamily: 'monospace', fontSize: 14 }}>
+              {newBest ? 'new high score!' : 'game over'}
+            </span>
             <span style={{ color: 'rgba(255,255,255,0.3)', fontFamily: 'monospace', fontSize: 11, marginTop: 6 }}>
               score: {score} — space to restart
             </span>
           </Overlay>
         )}
       </div>
+      {board.length > 0 && (
+        <div style={{ width: COLS * CELL, fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>
+          <span style={{ color: '#c084fc', letterSpacing: '0.1em' }}>HIGH SCORES </span>
+          {board.map((e, i) => (
+            <span key={i} style={{ marginLeft: 10, color: i === 0 ? '#fbbf24' : undefined }}>
+              {i + 1}. {e.score} <span style={{ opacity: 0.6 }}>{e.date}</span>
+            </span>
+          ))}
+        </div>
+      )}
       <span style={{ color: 'rgba(255,255,255,0.18)', fontFamily: 'monospace', fontSize: 11 }}>esc — back to terminal</span>
     </div>
   );

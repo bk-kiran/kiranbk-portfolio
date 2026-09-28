@@ -35,14 +35,15 @@ export async function POST(req: NextRequest) {
       `Projects: ${JSON.stringify(projects)}`;
 
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 400,
+      model: 'claude-opus-5',
+      max_tokens: 4000,
+      output_config: { effort: 'low' },
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userMessage }],
     });
 
     const text =
-      response.content[0].type === 'text' ? response.content[0].text.trim() : '{}';
+      response.content.find((b): b is Anthropic.TextBlock => b.type === 'text')?.text.trim() ?? '{}';
     const result = JSON.parse(text) as {
       synthesis: string;
       relevant: string[];

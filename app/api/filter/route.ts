@@ -26,13 +26,14 @@ export async function POST(req: NextRequest) {
     const userMessage = `Query: ${body.query}\nItems: ${JSON.stringify(items)}`;
 
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 200,
+      model: 'claude-opus-5',
+      max_tokens: 4000,
+      output_config: { effort: 'low' },
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userMessage }],
     });
 
-    const text = response.content[0].type === 'text' ? response.content[0].text.trim() : '[]';
+    const text = response.content.find((b): b is Anthropic.TextBlock => b.type === 'text')?.text.trim() ?? '[]';
     const ids = JSON.parse(text) as string[];
 
     return new Response(JSON.stringify({ ids }), {

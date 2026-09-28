@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTheme } from '@/lib/themes/useTheme';
-import type { Tab } from '@/app/page';
+type Tab = 'about' | 'experience' | 'projects';
 
 const TABS: { id: Tab; label: string; num: string }[] = [
   { id: 'about',      label: 'About',      num: '01' },

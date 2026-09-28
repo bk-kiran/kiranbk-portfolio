@@ -1,4 +1,20 @@
-export const experience = [
+export type ExperienceItem = {
+  id: string;
+  company: string;
+  role: string;
+  location?: string;
+  period: string;
+  logo: string;
+  logoImg?: string;
+  logoColor: string;
+  logoBg: string;
+  link?: string;
+  bullets: string[];
+  metrics?: string[];
+  tags: string[];
+};
+
+export const experience: ExperienceItem[] = [
   {
     id: "acnodal",
     company: "Acnodal",
