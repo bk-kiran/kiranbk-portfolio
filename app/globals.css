@@ -104,9 +104,35 @@ a:hover {
   margin: 0 auto;
 }
 
+/* ── Home ────────────────────────────────────────────────────────── */
+.home-outer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 100px);
+  padding: 80px 48px 60px;
+}
+
+.home-inner {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.home-intro { flex: 1; max-width: 400px; }
+.home-title { font-size: 52px; }
+
 /* ── Mobile ──────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .page-section {
     padding: 40px 24px 40px !important;
   }
+
+  .home-outer { padding: 48px 24px 40px; align-items: flex-start; }
+  .home-inner { flex-direction: column-reverse; align-items: flex-start; gap: 36px; }
+  .home-intro { max-width: none; }
+  .home-title { font-size: 40px; }
+  .home-photo { width: 180px !important; height: 215px !important; margin-left: 36px; }
 }

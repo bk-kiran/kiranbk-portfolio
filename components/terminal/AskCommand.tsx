@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, KeyboardEvent, ReactNode } from 'react';
+import { useEffect, useRef, useState, KeyboardEvent } from 'react';
 import manifestJson from '@/lib/rag/manifest.json';
 
 interface Manifest {
@@ -15,7 +15,7 @@ const manifest = manifestJson as Manifest;
 const C = {
   bot: '#4ade80',
   user: '#67e8f9',
-  cite: '#c084fc',
+  accent: '#c084fc',
   suggest: '#fbbf24',
   dim: 'rgba(255,255,255,0.35)',
   text: 'rgba(255,255,255,0.82)',
@@ -26,12 +26,10 @@ const MONO = "'Courier New', monospace";
 const SEEDED = [
   'why should I hire Kiran for an AI/ML role?',
   "what's Kiran's strongest project, technically?",
-  'is Kiran available for a Fall 2026 internship?',
+  'is Kiran open to full-time roles in 2027?',
 ];
 
 const STORAGE_TURNS = 'ask-turns';
-
-interface Source { source: string; text: string; score?: number }
 
 type Turn =
   | {
@@ -40,7 +38,6 @@ type Turn =
       answer: string;
       status: 'retrieving' | 'streaming' | 'done' | 'error';
       meta?: { chunks: number; ms: number; fallback?: boolean };
-      sources?: Source[];
       suggestions?: string[];
       error?: string;
     }
@@ -50,13 +47,19 @@ type Turn =
 
 const SUGGESTIONS_RE = /<suggestions>([\s\S]*?)<\/suggestions>/;
 
-/** Strip the <suggestions> block, including a half-streamed opening tag at the tail. */
+/**
+ * Strip the <suggestions> block (including a half-streamed opening tag at the tail)
+ * and any [n] citation markers, which aren't shown to visitors.
+ */
 function visibleAnswer(raw: string): string {
   const idx = raw.indexOf('<suggestions>');
   let text = idx === -1 ? raw : raw.slice(0, idx);
   const partial = text.match(/<[a-z]*$/);
   if (partial) text = text.slice(0, partial.index);
-  return text.trim();
+  return text
+    .replace(/\s*\[\d+\](?:\s*\[\d+\])*/g, '')
+    .replace(/\s*\[\d*$/, '')
+    .trim();
 }
 
 function parseSuggestions(raw: string): string[] {
@@ -68,17 +71,6 @@ function parseSuggestions(raw: string): string[] {
   } catch {
     return [];
   }
-}
-
-function citedIndexes(answer: string): number[] {
-  const seen = new Set<number>();
-  for (const m of answer.matchAll(/\[(\d+)\]/g)) seen.add(Number(m[1]));
-  return [...seen].sort((a, b) => a - b);
-}
-
-function snippet(text: string, max = 110) {
-  const flat = text.replace(/\s+/g, ' ').trim();
-  return flat.length > max ? `${flat.slice(0, max)}…` : flat;
 }
 
 function loadTurns(): Turn[] {
@@ -96,17 +88,6 @@ function loadTurns(): Turn[] {
 }
 
 // ── rendering helpers ───────────────────────────────────────────────────────
-
-function withCitations(text: string): ReactNode[] {
-  return text.split(/(\[\d+\])/g).map((part, i) =>
-    /^\[\d+\]$/.test(part) ? (
-      <span key={i} style={{
-        color: C.cite, border: `1px solid ${C.cite}55`, background: `${C.cite}14`,
-        borderRadius: 3, padding: '0 3px', margin: '0 1px', fontSize: 11,
-      }}>{part}</span>
-    ) : <span key={i}>{part}</span>,
-  );
-}
 
 function Label({ who }: { who: 'you' | 'kiran-bot' }) {
   return (
@@ -236,8 +217,6 @@ export default function AskShell({ initialQuestion, onExit }: Props) {
           } else if (payload.type === 'text') {
             raw += payload.text;
             updateLast({ answer: raw });
-          } else if (payload.type === 'sources') {
-            updateLast({ sources: payload.sources });
           } else if (payload.type === 'error') {
             throw new Error(payload.message);
           }
@@ -257,17 +236,10 @@ export default function AskShell({ initialQuestion, onExit }: Props) {
       `_exported ${new Date().toLocaleString()} from kiranbk.com_`,
       '',
       ...qaTurns.filter(t => t.status === 'done').flatMap(t => {
-        const answer = visibleAnswer(t.answer);
-        const cited = citedIndexes(answer);
         return [
           `**you ›** ${t.question}`,
           '',
-          `**kiran-bot ›** ${answer}`,
-          '',
-          ...(t.sources ?? [])
-            .map((s, i) => ({ s, n: i + 1 }))
-            .filter(({ n }) => cited.includes(n))
-            .map(({ s, n }) => `> [${n}] ${s.source} — "${snippet(s.text)}"`),
+          `**kiran-bot ›** ${visibleAnswer(t.answer)}`,
           '',
         ];
       }),
@@ -360,10 +332,10 @@ export default function AskShell({ initialQuestion, onExit }: Props) {
         style={{ overflowY: 'auto', padding: '16px 20px 4px', minHeight: 300, maxHeight: 440, cursor: 'text' }}
       >
         {/* header card */}
-        <div style={{ borderLeft: `3px solid ${C.cite}`, background: 'rgba(255,255,255,0.03)', padding: '10px 14px', marginBottom: 14, borderRadius: 4 }}>
-          <div style={{ color: C.cite }}>▲ kiran-bot · ask anything about Kiran</div>
+        <div style={{ borderLeft: `3px solid ${C.accent}`, background: 'rgba(255,255,255,0.03)', padding: '10px 14px', marginBottom: 14, borderRadius: 4 }}>
+          <div style={{ color: C.accent }}>▲ kiran-bot · ask anything about Kiran</div>
           <div style={{ color: C.dim, fontSize: 12 }}>
-            RAG over my résumé, experience, projects & coursework. answers cite their sources.
+            RAG over my résumé, experience, projects & coursework.
             {manifest.totalChunks > 0 && ` · ${manifest.docs.length} docs · ${manifest.totalChunks} chunks indexed`}
           </div>
           <div style={{ color: C.dim, fontSize: 12, marginTop: 2 }}>
@@ -389,10 +361,6 @@ export default function AskShell({ initialQuestion, onExit }: Props) {
           }
 
           const answer = visibleAnswer(t.answer);
-          const cited = citedIndexes(answer);
-          const shownSources = (t.sources ?? [])
-            .map((s, i) => ({ s, n: i + 1 }))
-            .filter(({ n }) => cited.includes(n));
           const isLast = ti === turns.length - 1;
 
           return (
@@ -417,26 +385,13 @@ export default function AskShell({ initialQuestion, onExit }: Props) {
                   )}
                   {answer && (
                     <div style={{ color: C.text, whiteSpace: 'pre-wrap' }}>
-                      {withCitations(answer)}
+                      {answer}
                       {t.status === 'streaming' && <span className="ask-cursor" />}
                     </div>
                   )}
                   {t.status === 'streaming' && !answer && <span className="ask-cursor" />}
                   {t.status === 'error' && (
                     <div style={{ color: C.error }}>error: {t.error}</div>
-                  )}
-
-                  {t.status === 'done' && shownSources.length > 0 && (
-                    <div style={{ marginTop: 8, fontSize: 12 }}>
-                      <div style={{ color: C.dim, letterSpacing: '0.12em' }}>SOURCES</div>
-                      {shownSources.map(({ s, n }) => (
-                        <div key={n} style={{ color: C.dim }}>
-                          <span style={{ color: C.cite }}>[{n}]</span>{' '}
-                          <span style={{ color: C.user }}>{s.source}</span>
-                          {' · '}&ldquo;{snippet(s.text)}&rdquo;
-                        </div>
-                      ))}
-                    </div>
                   )}
 
                   {t.status === 'done' && isLast && t.suggestions && t.suggestions.length > 0 && (

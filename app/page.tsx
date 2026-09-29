@@ -17,7 +17,7 @@ function PhotoHero() {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <div style={{ flexShrink: 0, position: 'relative', width: 260, height: 310 }}>
+    <div className="home-photo" style={{ flexShrink: 0, position: 'relative', width: 260, height: 310 }}>
       {imgError ? (
         <div style={{
           width: 260, height: 310, borderRadius: 14,
@@ -38,7 +38,8 @@ function PhotoHero() {
           alt="Kiran BK"
           priority
           onError={() => setImgError(true)}
-          style={{ borderRadius: 14, objectFit: 'cover', display: 'block' }}
+          sizes="260px"
+          style={{ borderRadius: 14, objectFit: 'cover', display: 'block', width: '100%', height: '100%' }}
         />
       )}
 
@@ -67,22 +68,10 @@ function PhotoHero() {
 
 export default function Home() {
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: 'calc(100vh - 100px)',
-      padding: '80px 48px 60px',
-    }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 80,
-        maxWidth: 900,
-        width: '100%',
-      }}>
+    <div className="home-outer">
+      <div className="home-inner">
         {/* Intro text */}
-        <div style={{ flex: 1, maxWidth: 400 }}>
+        <div className="home-intro">
           <p style={{
             fontSize: 11,
             letterSpacing: '0.14em',
@@ -94,9 +83,8 @@ export default function Home() {
             Software Engineer · AI/ML
           </p>
 
-          <h1 style={{
+          <h1 className="home-title" style={{
             fontFamily: 'var(--font-serif, Georgia, serif)',
-            fontSize: 52,
             fontWeight: 700,
             lineHeight: 1.08,
             color: 'var(--text)',
@@ -121,7 +109,7 @@ export default function Home() {
             lineHeight: 1.85,
             marginBottom: 40,
           }}>
-            A CS Honors student at UMass Amherst (May '27) who builds full-stack systems and AI/ML pipelines from agentic backends to consumer-facing products. I've shipped demand-forecasting pipelines, real-time messaging at scale, and AI-powered learning tools.
+            A CS student at UMass Amherst (May '27) who builds full-stack systems and AI/ML pipelines from agentic backends to consumer-facing products. I've shipped demand-forecasting pipelines, real-time messaging at scale, and AI-powered learning tools.
           </p>
 
           <p style={{

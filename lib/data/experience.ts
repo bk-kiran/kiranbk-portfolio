@@ -11,39 +11,23 @@ export type ExperienceItem = {
   link?: string;
   bullets: string[];
   metrics?: string[];
-  tags: string[];
+  tags?: string[];
 };
 
 export const experience: ExperienceItem[] = [
   {
-    id: "acnodal",
-    company: "Acnodal",
-    role: "Open Source Contributer",
-    period: "June 2026 – Present",
-    logo: "Ac",
-    logoImg: "/acnodal.jpeg",
-    logoColor: "green",
-    logoBg: "green",
+    id: "ciir",
+    company: "Center for Intelligent Information Retrieval",
+    role: "Research Assistant",
+    location: "Hybrid",
+    period: "May 2026 – Present",
+    logo: "A",
+    logoImg: "/cics.jpeg",
+    logoColor: "#7c3aed",
+    logoBg: "#ede9fe",
     bullets: [
-      "soon",
-    ],
-    tags: ["LangGraph", "Claude Sonnet", "TypeScript", "EdTech"],
-  },
-
-  {
-    id: "aubot",
-    company: "Aubot",
-    role: "Software Engineer Intern",
-    location: "Remote",
-    period: "May 2026 – August 2026",
-    logo: "Au",
-    logoImg: "/aubot.jpeg",
-    logoColor: "spacegray",
-    logoBg: "slate",
-    bullets: [
-      "soon",
-    ],
-    tags: ["LangGraph", "Claude Sonnet", "TypeScript", "EdTech"],
+      "Independent Study (Prof. Rahimi, 2026–27): Self-improving dense retrieval using hard-negative mining and LLM-generated training signals, evaluating iterative retraining on MS MARCO and BRIGHT with nDCG@10"
+    ]
   },
 
   {
@@ -51,17 +35,17 @@ export const experience: ExperienceItem[] = [
     company: "Alterea",
     role: "Software Developer",
     location: "Remote",
-    period: "Jan 2026 – May 2026",
+    period: "Jan 2026 – Aug 2026",
     logo: "A",
     logoImg: "/alterea.jpeg",
     logoColor: "#7c3aed",
     logoBg: "#ede9fe",
     bullets: [
-      "Improved readability of AI-generated session insights for teachers on Agents of Influence, an AI media literacy game, by rebuilding the performance analysis modal with React as a popup with collapsible skill breakdowns",
+      "Built teacher analytics for Agents of Influence, Alterea's AI media-literacy game for K-12 classrooms: rebuilt the React performance modal with collapsible skill breakdowns so teachers could read session insights at a glance",
       "Restored correct behavior across classroom and account flows by resolving 10+ bugs in the frontend and Firebase backend, including form validation that wrongly required email consent and student-account display errors",
       "Helped build the agentic pipeline behind multi-turn educational conversations",
     ],
-    tags: ["LangGraph", "Claude Sonnet", "TypeScript", "EdTech"],
+    tags: ["LangGraph", "React", "TypeScript", "Firebase"],
   },
   {
     id: "lee-yuen",
@@ -80,6 +64,22 @@ export const experience: ExperienceItem[] = [
     ],
     tags: ["Python", "scikit-learn", "AWS", "React", "Spring Boot", "Docker"],
   },
+
+  {
+    id: "bionlp",
+    company: "BioNLP Lab",
+    role: "Research Assistant",
+    location: "Hybrid",
+    period: "Dec 2024 – May 2025",
+    logo: "A",
+    logoImg: "/cics.jpeg",
+    logoColor: "#7c3aed",
+    logoBg: "#ede9fe",
+    bullets: [
+      "BioNLP Lab (2025): LoRA fine-tuned LLaMA, BioGPT, and Clinical-T5 on MedCalc-Bench to improve clinical-calculation accuracy, benchmarking against zero-shot baselines; presented at the URV Symposium"
+    ]
+  },
+
   {
     id: "trubridge",
     company: "TruBridge Healthcare",

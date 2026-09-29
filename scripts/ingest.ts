@@ -76,7 +76,16 @@ function textChunks(text: string, rel: string): Chunk[] {
   return chunks;
 }
 
+// Phone numbers stay out of the index (it's committed to a public repo and quotable by the bot).
+const PHONE = /(?:\+?\d{1,2}[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/g;
+const redact = (text: string) => text.replace(PHONE, '[phone removed]');
+
 async function fileChunks(file: string, rel = path.relative(CORPUS, file)): Promise<Chunk[] | null> {
+  const chunks = await rawFileChunks(file, rel);
+  return chunks && chunks.map(c => ({ ...c, text: redact(c.text) }));
+}
+
+async function rawFileChunks(file: string, rel: string): Promise<Chunk[] | null> {
   const ext = path.extname(file).toLowerCase();
   if (ext === '.md' || ext === '.mdx') return markdownChunks(fs.readFileSync(file, 'utf8'), rel);
   if (ext === '.txt') return textChunks(fs.readFileSync(file, 'utf8'), rel);

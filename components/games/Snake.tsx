@@ -129,24 +129,47 @@ export default function Snake({ onExit }: Props) {
     return () => { alive = false; clearTimeout(id); };
   }, [phase, draw, recordScore]);
 
+  const steer = useCallback((d: Dir) => {
+    if (d !== OPP[gameRef.current.dir]) gameRef.current.nextDir = d;
+    if (phase === 'idle') setPhase('playing');
+  }, [phase]);
+
+  const restart = useCallback(() => {
+    setPhase('idle');
+    setRestart(k => k + 1);
+  }, []);
+
   // keyboard
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const d = KEY[e.key];
       if (d) {
         e.preventDefault();
-        if (d !== OPP[gameRef.current.dir]) gameRef.current.nextDir = d;
-        if (phase === 'idle') setPhase('playing');
+        steer(d);
         return;
       }
-      if ((e.key === 'Enter' || e.key === ' ') && phase === 'dead') {
-        setPhase('idle');
-        setRestart(k => k + 1);
-      }
+      if ((e.key === 'Enter' || e.key === ' ') && phase === 'dead') restart();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [phase]);
+  }, [phase, steer, restart]);
+
+  // touch: swipe on the board, or use the on-screen d-pad
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    if (phase === 'dead') { restart(); return; }
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x, dy = t.clientY - start.y;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+    steer(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'R' : 'L') : (dy > 0 ? 'D' : 'U'));
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '12px 0 10px', gap: 8, background: '#0a0a0a' }}>
@@ -157,13 +180,13 @@ export default function Snake({ onExit }: Props) {
           <span style={{ color: '#4ade80' }}>score: {score}</span>
         </span>
       </div>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', touchAction: 'none' }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <canvas ref={canvasRef} width={COLS * CELL} height={ROWS * CELL}
           style={{ display: 'block', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 3 }} />
         {phase === 'idle' && (
           <Overlay>
             <span style={{ color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace', fontSize: 12 }}>
-              arrow keys / wasd to start
+              arrow keys / wasd / swipe to start
             </span>
           </Overlay>
         )}
@@ -173,7 +196,7 @@ export default function Snake({ onExit }: Props) {
               {newBest ? 'new high score!' : 'game over'}
             </span>
             <span style={{ color: 'rgba(255,255,255,0.3)', fontFamily: 'monospace', fontSize: 11, marginTop: 6 }}>
-              score: {score} — space to restart
+              score: {score} — space or tap to restart
             </span>
           </Overlay>
         )}
@@ -188,7 +211,18 @@ export default function Snake({ onExit }: Props) {
           ))}
         </div>
       )}
+      <div className="snake-dpad" style={{ display: 'none', gridTemplateColumns: 'repeat(3, 44px)', gap: 6 }}>
+        {([['', null], ['▲', 'U'], ['', null], ['◀', 'L'], ['▼', 'D'], ['▶', 'R']] as [string, Dir | null][]).map(([label, d], i) =>
+          d ? (
+            <button key={i} aria-label={`move ${d}`} onClick={() => (phase === 'dead' ? restart() : steer(d))} style={{
+              height: 40, borderRadius: 6, border: '1px solid rgba(255,255,255,0.12)',
+              background: 'rgba(255,255,255,0.05)', color: '#4ade80', fontSize: 16,
+            }}>{label}</button>
+          ) : <span key={i} />,
+        )}
+      </div>
       <span style={{ color: 'rgba(255,255,255,0.18)', fontFamily: 'monospace', fontSize: 11 }}>esc — back to terminal</span>
+      <style>{`@media (pointer: coarse) { .snake-dpad { display: grid !important; } }`}</style>
     </div>
   );
 }

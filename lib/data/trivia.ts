@@ -44,9 +44,11 @@ const HANDWRITTEN: Handwritten[] = [
   { q: 'Which AI media-literacy game did Kiran work on at Alterea?', options: ['Agents of Influence', 'Fact or Fiction', 'Signal & Noise', 'Truth Quest'], answer: 0, fact: 'Kiran rebuilt its performance-analysis modal for teachers in React.' },
   { q: 'How many frontend and Firebase bugs did Kiran resolve at Alterea?', options: ['10+', '2', '50+', '100+'], answer: 0, fact: 'Including a consent form that wrongly required email and student-account display errors.' },
 
-  // current roles
-  { q: 'Which company is Kiran an open source contributor to?', options: ['Acnodal', 'Mozilla', 'HashiCorp', 'Vercel'], answer: 0, fact: 'Since June 2026.' },
-  { q: 'Where did Kiran intern as a software engineer in summer 2026?', options: ['Aubot', 'Alterea', 'Zyntra.io', 'TruBridge Healthcare'], answer: 0, fact: 'May – August 2026, remote.' },
+  // research
+  { q: "What is Kiran's independent study at CIIR about?", options: ['Self-improving dense retrieval', 'Robot motion planning', 'Image segmentation', 'Blockchain consensus'], answer: 0, fact: 'Hard-negative mining and LLM-generated training signals, with Prof. Rahimi (2026–27).' },
+  { q: 'Which benchmarks does Kiran use to evaluate his CIIR retrieval research?', options: ['MS MARCO and BRIGHT', 'ImageNet and COCO', 'GLUE and SQuAD', 'MMLU and HellaSwag'], answer: 0, fact: 'Evaluating iterative retraining with nDCG@10.' },
+  { q: 'Which metric does Kiran report for his dense retrieval research?', options: ['nDCG@10', 'BLEU', 'F1 at 0.5 IoU', 'Perplexity'], answer: 0, fact: 'On MS MARCO and BRIGHT.' },
+  { q: "Where did Kiran present his BioNLP Lab research?", options: ['The URV Symposium', 'NeurIPS', 'ACL', 'CHI'], answer: 0, fact: 'LoRA fine-tuning LLaMA, BioGPT and Clinical-T5 on MedCalc-Bench.' },
 
   // projects
   { q: 'What is Kapok?', options: ['An offline-first disaster-relief app', 'A chess engine', 'A receipt tracker', 'A RAG study tool'], answer: 0, fact: 'Flutter + Firebase + Mapbox, built with 15 contributors.' },
@@ -68,15 +70,15 @@ const HANDWRITTEN: Handwritten[] = [
   { q: 'Roughly how many members does BUILD UMass have?', options: ['70+', '10', '300+', '1,000+'], answer: 0, fact: 'Kiran is both a software developer and treasurer.' },
   { q: 'Roughly how many students has Kiran helped as a teaching assistant?', options: ['300+', '30+', '100+', '1,000+'], answer: 0, fact: 'Across Python Programming, Computer Systems, Data Management and Software Engineering.' },
   { q: 'Which course is Kiran a TA for in Fall 2026?', options: ['Software Engineering', 'Operating Systems', 'Linear Algebra', 'Computer Networks'], answer: 0, fact: 'After Data Management, Computer Systems and Python Programming.' },
-  { q: 'Which models did Kiran fine-tune at the UMass BioNLP Lab?', options: ['Clinical-T5, BioGPT & LLaMA', 'GPT-4 & Claude', 'Whisper & wav2vec', 'ResNet & ViT'], answer: 0, fact: 'With LoRA, on the MED-CALC-BENCH benchmark.' },
+  { q: 'Which models did Kiran fine-tune at the UMass BioNLP Lab?', options: ['Clinical-T5, BioGPT & LLaMA', 'GPT-4 & Claude', 'Whisper & wav2vec', 'ResNet & ViT'], answer: 0, fact: 'With LoRA, on the MedCalc-Bench benchmark.' },
   { q: 'Which fine-tuning technique did Kiran use at the BioNLP Lab?', options: ['LoRA', 'RLHF', 'Full fine-tuning only', 'Knowledge distillation'], answer: 0, fact: 'On Clinical-T5, BioGPT and LLaMA.' },
   { q: 'What does the iCons program stand for?', options: ['Integrated Concentration in STEM', 'International Computing Society', 'Intro to Computer Science', 'Innovation Council'], answer: 0, fact: 'A competitive 20-credit STEM certificate at UMass Amherst.' },
   { q: 'What did Kiran’s iCons 3 project investigate?', options: ['Waste-heat recovery from CPUs', 'Microplastics in rivers', 'Solar panel efficiency', 'Traffic flow modeling'], answer: 0, fact: 'Direct-chip thermoelectric generators for data-center energy recovery.' },
   { q: 'What did Kiran’s iCons 2 project forecast?', options: ['Peak electricity use on campus', 'Dining hall demand', 'Course enrollment', 'Snowfall'], answer: 0, fact: 'ML models on real-time UMass campus energy data.' },
   { q: 'What was Kiran’s iCons 1 project about?', options: ['Wind energy', 'Water purification', 'Vaccine logistics', 'Urban farming'], answer: 0, fact: 'Sentiment analysis of rural perceptions (NLTK) plus a 3D-printed wind-powered storage prototype.' },
   { q: 'What does the RDCL lab, where Kiran does research, study?', options: ['Computational modeling of reasoning and decision making', 'Robotics control', 'Computer graphics', 'Network security'], answer: 0, fact: 'Kiran joined in September 2026.' },
-  { q: 'What does CIIR at UMass focus on?', options: ['Intelligent information retrieval', 'Cybersecurity', 'Quantum computing', 'Human-computer interaction'], answer: 0, fact: 'Kiran started research there in September 2026.' },
-  { q: 'When does Kiran graduate from UMass Amherst?', options: ['May 2027', 'May 2026', 'December 2026', 'May 2028'], answer: 0, fact: 'B.S. Computer Science (Honors), class of 2027.' },
+  { q: 'What does CIIR at UMass focus on?', options: ['Intelligent information retrieval', 'Cybersecurity', 'Quantum computing', 'Human-computer interaction'], answer: 0, fact: 'Kiran has been a research assistant there since May 2026.' },
+  { q: 'When does Kiran graduate from UMass Amherst?', options: ['May 2027', 'May 2026', 'December 2026', 'May 2028'], answer: 0, fact: 'B.S. Computer Science, class of 2027.' },
 ];
 
 // ── generated from lib/data ─────────────────────────────────────────────────
@@ -131,10 +133,15 @@ function generated(): TriviaQuestion[] {
         `${e.role} at ${e.company}, ${e.period}.`);
     });
 
-    const otherTags = realExperience.filter(x => x.id !== e.id).flatMap(x => x.tags).filter(t => !e.tags.includes(t));
+    const tags = e.tags;
+    if (!tags?.length) continue;
+    const otherTags = realExperience
+      .filter(x => x.id !== e.id)
+      .flatMap(x => x.tags ?? [])
+      .filter(t => !tags.includes(t));
     add(`g:tag:${e.id}`, `Which of these did Kiran use at ${e.company}?`,
-      mc(pick(e.tags), otherTags),
-      `${e.company} stack: ${e.tags.join(', ')}.`);
+      mc(pick(tags), otherTags),
+      `${e.company} stack: ${tags.join(', ')}.`);
   }
 
   // Only roles that unambiguously identify one company (ignoring "Engineer"/"Engineering").

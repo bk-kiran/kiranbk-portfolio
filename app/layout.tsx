@@ -10,9 +10,26 @@ const playfair = Playfair_Display({
   weight: ["400", "600", "700"],
 });
 
+const description =
+  "Kiran BK — software engineer building full-stack systems and AI/ML pipelines. " +
+  "CS at UMass Amherst ('27), open to full-time SWE and ML roles in 2027.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://kiranbk.com"),
   title: "Kiran BK",
-  description: "Kiran BK — software engineer portfolio",
+  description,
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Kiran BK",
+    title: "Kiran BK — Software Engineer · AI/ML",
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kiran BK — Software Engineer · AI/ML",
+    description,
+  },
 };
 
 export default function RootLayout({
@@ -22,7 +39,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={playfair.variable} suppressHydrationWarning>
-      <body style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
+      {/* suppressHydrationWarning: extensions like Grammarly inject attributes on <body> before hydration */}
+      <body style={{ fontFamily: "system-ui, -apple-system, sans-serif" }} suppressHydrationWarning>
         <Script id="anti-flash" strategy="beforeInteractive">{`
           (function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.classList.add('dark');}catch(e){}})()`}
         </Script>
