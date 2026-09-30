@@ -4,7 +4,9 @@ import { retrieve } from '@/lib/rag/retrieve';
 import { buildSystemPrompt, buildMessages } from '@/lib/rag/prompt';
 import type { Message } from '@/lib/rag/prompt';
 
-export const runtime = 'edge';
+// Node.js runtime, not edge: the Anthropic SDK contains (unused) credential-file code
+// that imports node:fs / node:path, which Vercel's edge runtime rejects at deploy time.
+export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
