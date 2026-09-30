@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# kiranbk.com
 
-## Getting Started
+Personal site for Kiran BK: a portfolio with a built-in terminal. Press the `>_` button, or run
+`help` once it's open.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, Turbopack) + React 19, deployed on Vercel
+- **kiran-bot** (`ask`): retrieval-augmented chat over the site data, résumé, and `corpus/`
+  - Voyage `voyage-3-lite` embeddings, with a local vector index (`lib/rag/index.json`) ranked in memory
+  - Claude (`claude-opus-5`) streams the answers from an edge route (`app/api/ask`)
+- **Terminal apps**: daily about-me Wordle, trivia (130+ questions, many generated from `lib/data`),
+  Snake, a typing test, and Matrix rain
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.local.example .env.local   # add VOYAGE_API_KEY and ANTHROPIC_API_KEY
+npm run dev                        # http://localhost:3001
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To test from another device on your network, add your laptop's IP to `allowedDevOrigins`
+in `next.config.ts`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Content
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| What | Where |
+|---|---|
+| Experience, projects, education, skills | `lib/data/*.ts` |
+| Contact info and what you're looking for | `lib/data/personal.ts` |
+| Wordle answers and blurbs | `lib/data/wordle.ts` |
+| Handwritten trivia | `lib/data/trivia.ts` (the rest is generated from `lib/data`) |
+| Extra kiran-bot knowledge | `corpus/` (see `corpus/README.md`) |
 
-## Learn More
+**After changing `lib/data`, `corpus/`, or `public/resume.pdf`, rebuild kiran-bot's index and commit it:**
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run ingest -- --dry   # preview
+npm run ingest            # writes lib/rag/index.json + manifest.json
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Set `ANTHROPIC_API_KEY` and `VOYAGE_API_KEY` in the Vercel project. `/api/ask` has a
+per-instance rate limit (10 requests/min per IP) and caps input sizes. For real protection, also
+set a monthly spend limit in the Anthropic console and a rate-limit rule in Vercel's firewall.

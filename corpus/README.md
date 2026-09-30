@@ -23,15 +23,15 @@ If you put a `resume.pdf` here, it replaces `public/resume.pdf` in the index.
 - **Project deep dives** (`projects/<name>.md`): the problem, your role, the architecture,
   hard bugs, trade-offs and results with numbers. One `##` heading per topic.
 - **Experience notes** (`experience/<company>.md`): what you owned and shipped, and the impact,
-  especially for roles whose site entry is still "soon" (Acnodal, Aubot).
+  especially for newer roles whose site entry is short (e.g. your CIIR research).
 - **Coursework, research, and "about me"** (`about.md`): interests, what you're learning,
   and fun facts you're happy to share.
 
 Tips:
 - Write in the third person with your name ("Kiran built…"), one topic per heading.
-  Headings become the citation labels, e.g. `projects/studylens.md §architecture`.
+  Headings help retrieval find the right section, e.g. `projects/studylens.md §architecture`.
 - State facts explicitly, with dates and numbers. The bot is told never to guess.
-- Keep it current. If something here disagrees with the site, the bot may cite either.
+- Keep it current. If something here disagrees with the site, the bot may use either.
 
 ## Privacy
 

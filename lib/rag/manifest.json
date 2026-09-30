@@ -34,7 +34,7 @@
     },
     {
       "source": "education.md",
-      "chunks": 8
+      "chunks": 6
     },
     {
       "source": "skills.md",
@@ -45,7 +45,7 @@
       "chunks": 8
     }
   ],
-  "totalChunks": 30,
+  "totalChunks": 28,
   "embedModel": "voyage-3-lite",
-  "updatedAt": "2026-09-28T22:54:53.960Z"
+  "updatedAt": "2026-09-29T02:01:08.612Z"
 }

@@ -30,7 +30,7 @@ export const education: Education[] = [
   {
     id: 'umass',
     institution: 'University of Massachusetts Amherst',
-    degree: 'B.S. Computer Science (Honors)',
+    degree: 'B.S. Computer Science',
     period: 'Expected Graduation: May 2027',
     location: 'Amherst, MA',
     coursework: [
@@ -74,17 +74,6 @@ export const education: Education[] = [
       },
 
       {
-        name: 'Researcher @ CIIR',
-        link: 'https://ciir.cs.umass.edu/',
-        logo: 'R',
-        logoImg: '/cics.jpeg',
-        logoColor: '#0369a1',
-        logoBg: '#dbeafe',
-        period: 'Sep 2026 – Present',
-        description: 'Research at the Center of Intelligent Information Retrieval',
-      },
-
-      {
         name: 'Teaching Assistant',
         logo: 'TA',
         logoImg: '/cics.jpg',
@@ -123,24 +112,6 @@ export const education: Education[] = [
             name: 'iCons 1: Wind Energy',
             description: 'Analyzed rural perceptions of wind energy using sentiment analysis (Python, NLTK); co-developed a 3D-printed wind-powered energy storage prototype balancing engineering feasibility with social acceptance.',
           },
-        ],
-      },
-
-      {
-        name: 'Researcher @ BioNLP Lab',
-        link: 'https://bionlp.cs.umass.edu/',
-        logo: 'BN',
-        logoImg: '/cics.jpeg',
-        logoColor: '#0f766e',
-        logoBg: '#ccfbf1',
-        period: 'Dec 2024 – Feb 2025',
-        description: 'Developed clinically specialized LLMs to enhance medical decision-making by fine-tuning models like Clinical-T5, BioGPT, and LLaMA with LoRA on the MED-CALC-BENCH benchmark.',
-        courses: [
-          'PyTorch',
-          'Hugging Face Transformers',
-          'scikit-learn',
-          'W&B',
-          'CUDA',
         ],
       },
     ],

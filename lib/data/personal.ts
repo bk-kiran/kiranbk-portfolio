@@ -1,10 +1,10 @@
 export const personal = {
   name: "Kiran BK",
   school: "UMass Amherst",
-  degree: "Honors CS",
+  degree: "B.S. Computer Science",
   gpa: "3.8",
   classYear: "'27",
-  seeking: ["SWE/AI internship · Fall 2026", "Full-time SWE/AI · 2027"],
+  seeking: ["Full-time SWE / AI/ML roles · 2027"],
 };
 
 export const contact = {

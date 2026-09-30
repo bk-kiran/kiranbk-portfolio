@@ -4,7 +4,7 @@ export type WordleEntry = { word: string; blurb: string; link?: string };
 
 export const WORDLE_WORDS: WordleEntry[] = [
   { word: 'REACT', blurb: 'The frontend in most of my work — Zyntra messaging, the Lee Yuen quotation tool, and the Alterea insights modal.', link: '/experience' },
-  { word: 'UMASS', blurb: 'UMass Amherst — B.S. Computer Science (Honors), graduating May 2027.', link: '/education' },
+  { word: 'UMASS', blurb: 'UMass Amherst — B.S. Computer Science, graduating May 2027.', link: '/education' },
   { word: 'KAPOK', blurb: 'Kapok: an offline-first Flutter disaster-relief app built with 15 contributors for a real client.', link: 'https://github.com/ShreyanshMisra/Kapok' },
   { word: 'KEEPO', blurb: 'Keepo: an AI receipt tracker with dual LLM extraction agents and async Inngest jobs.', link: 'https://github.com/bk-kiran/Keepo' },
   { word: 'NUMPY', blurb: 'NumPy + pandas powered the clinical-record analysis at TruBridge Healthcare.', link: '/experience' },
@@ -35,15 +35,15 @@ export const WORDLE_WORDS: WordleEntry[] = [
   { word: 'ASYNC', blurb: 'Keepo processes receipts in async Inngest background jobs with real-time status.', link: 'https://github.com/bk-kiran/Keepo' },
   { word: 'BUILD', blurb: 'BUILD UMass: I am a software developer and treasurer for a 70+ member pro-bono software org.', link: 'https://www.buildumass.com/' },
   { word: 'ICONS', blurb: 'iCons scholar — interdisciplinary STEM research on wind energy, energy forecasting and waste-heat recovery.', link: '/education' },
-  { word: 'HONOR', blurb: 'Honors Computer Science at UMass Amherst.', link: '/education' },
+  { word: 'MARCO', blurb: 'MS MARCO: one of the benchmarks for my self-improving dense retrieval research at CIIR.', link: '/experience' },
   { word: 'GRADE', blurb: 'As a TA I grade, hold office hours and answer Piazza questions for 300+ students.', link: '/education' },
   { word: 'HOURS', blurb: 'Weekly TA office hours across Software Engineering, Data Management, Systems and Python.', link: '/education' },
-  { word: 'LLAMA', blurb: 'At the BioNLP Lab I fine-tuned Clinical-T5, BioGPT and LLaMA with LoRA on MED-CALC-BENCH.', link: '/education' },
-  { word: 'TORCH', blurb: 'PyTorch + Hugging Face for clinical LLM fine-tuning at the BioNLP Lab.', link: '/education' },
-  { word: 'BENCH', blurb: 'MED-CALC-BENCH: the medical-calculation benchmark behind my BioNLP research.', link: '/education' },
+  { word: 'LLAMA', blurb: 'At the BioNLP Lab I fine-tuned Clinical-T5, BioGPT and LLaMA with LoRA on MedCalc-Bench.', link: '/experience' },
+  { word: 'TORCH', blurb: 'PyTorch + Hugging Face for clinical LLM fine-tuning at the BioNLP Lab.', link: '/experience' },
+  { word: 'BENCH', blurb: 'MedCalc-Bench: the clinical-calculation benchmark behind my BioNLP research, presented at the URV Symposium.', link: '/experience' },
   { word: 'POWER', blurb: 'iCons 2: ML models predicting peak electricity use from live UMass campus data.', link: '/education' },
   { word: 'STACK', blurb: 'Full-stack by default: React/Next.js up front, Spring Boot, Node or Convex behind.', link: '/projects' },
-  { word: 'AUBOT', blurb: 'Software Engineer Intern at Aubot, summer 2026.', link: '/experience' },
+  { word: 'DENSE', blurb: 'At CIIR I research self-improving dense retrieval with hard-negative mining and LLM-generated training signals.', link: '/experience' },
   { word: 'CODES', blurb: 'This whole terminal is a React component — commands, the ask sub-shell and these games.', link: 'https://github.com/bk-kiran' },
 ];
 

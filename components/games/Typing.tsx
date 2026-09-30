@@ -44,9 +44,9 @@ export default function Typing({ onExit }: Props) {
   const [elapsed, setElapsed] = useState(0);
   const startRef  = useRef<number | null>(null);
   const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
-  const wrapRef   = useRef<HTMLDivElement>(null);
+  const inputRef  = useRef<HTMLInputElement>(null);
 
-  useEffect(() => { wrapRef.current?.focus(); }, []);
+  useEffect(() => { inputRef.current?.focus(); }, []);
 
   const stopTimer = useCallback(() => {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
@@ -60,50 +60,38 @@ export default function Typing({ onExit }: Props) {
     setErrors(0);
     setPhase('idle');
     setElapsed(0);
-    setTimeout(() => wrapRef.current?.focus(), 0);
+    setTimeout(() => inputRef.current?.focus(), 0);
   }, [stopTimer]);
 
   // cleanup on unmount
   useEffect(() => () => stopTimer(), [stopTimer]);
 
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (phase === 'done') {
-      if (e.key === 'Enter') restart();
-      return;
-    }
-    if (e.key === 'Backspace') {
-      e.preventDefault();
-      setTyped(t => t.slice(0, -1));
-      return;
-    }
-    if (e.key.length !== 1) return;
+  // All typing goes through a hidden <input>, so phones get their on-screen keyboard
+  // (tap the passage to focus it) and desktop works the same way.
+  function handleChange(value: string) {
+    if (phase === 'done') return;
+    const next = value.slice(0, passage.length);
 
-    setTyped(prev => {
-      if (prev.length >= passage.length) return prev;
-
-      if (!startRef.current) {
-        startRef.current = Date.now();
-        timerRef.current = setInterval(() => {
-          setElapsed(Date.now() - startRef.current!);
-        }, 80);
-        setPhase('typing');
-      }
-
-      const next = prev + e.key;
-      let err = 0;
-      for (let i = 0; i < next.length; i++) {
-        if (next[i] !== passage[i]) err++;
-      }
-      setErrors(err);
-
-      if (next.length === passage.length) {
-        stopTimer();
+    if (!startRef.current && next.length > 0) {
+      startRef.current = Date.now();
+      timerRef.current = setInterval(() => {
         setElapsed(Date.now() - startRef.current!);
-        setPhase('done');
-      }
+      }, 80);
+      setPhase('typing');
+    }
 
-      return next;
-    });
+    let err = 0;
+    for (let i = 0; i < next.length; i++) {
+      if (next[i] !== passage[i]) err++;
+    }
+    setErrors(err);
+    setTyped(next);
+
+    if (next.length === passage.length) {
+      stopTimer();
+      setElapsed(Date.now() - startRef.current!);
+      setPhase('done');
+    }
   }
 
   const wpm = calcWpm(typed.length, elapsed);
@@ -111,16 +99,26 @@ export default function Typing({ onExit }: Props) {
 
   return (
     <div
-      ref={wrapRef}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-      onClick={() => wrapRef.current?.focus()}
+      onClick={() => inputRef.current?.focus()}
       style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         padding: '16px 24px 12px', gap: 12, background: '#0a0a0a',
         outline: 'none', cursor: 'text', width: '100%', boxSizing: 'border-box',
+        position: 'relative',
       }}
     >
+      <input
+        ref={inputRef}
+        value={typed}
+        onChange={e => handleChange(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Enter' && phase === 'done') restart(); }}
+        aria-label="type the passage"
+        autoCapitalize="off"
+        autoCorrect="off"
+        autoComplete="off"
+        spellCheck={false}
+        style={{ position: 'absolute', opacity: 0, width: 1, height: 1, pointerEvents: 'none', top: 0, left: 0 }}
+      />
       <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', fontFamily: 'monospace', fontSize: 12 }}>
         <span style={{ color: '#4ade80' }}>type test</span>
         <span style={{ color: 'rgba(255,255,255,0.3)' }}>
@@ -167,7 +165,10 @@ export default function Typing({ onExit }: Props) {
           <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginTop: 6 }}>
             accuracy: {acc}% · time: {(elapsed / 1000).toFixed(1)}s
           </div>
-          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.2)', marginTop: 8 }}>enter to try again</div>
+          <button onClick={e => { e.stopPropagation(); restart(); }} style={{
+            fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 8, background: 'none',
+            border: 'none', cursor: 'pointer', fontFamily: 'monospace',
+          }}>enter or tap to try again</button>
         </div>
       ) : (
         <div style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.15)', alignSelf: 'flex-start' }}>

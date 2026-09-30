@@ -195,7 +195,7 @@ function ExperienceCard({ item }: { item: ExperienceItem }) {
 
       {/* Tech chips / logos */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-        {item.tags.map((tag) => {
+        {(item.tags ?? []).map((tag) => {
           const logo = techLogos[tag];
           return logo ? (
             <span key={tag} title={tag} style={{

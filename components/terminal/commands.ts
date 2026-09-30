@@ -80,7 +80,7 @@ const COMMANDS: Command[] = [
         lines.push(dim(`${e.period}${e.location ? ` · ${e.location}` : ''}`, 25));
         if (full) {
           for (const b of e.bullets.filter(b => b && b !== 'soon')) lines.push(out(`– ${b}`, 4));
-          lines.push(dim(e.tags.join(' · '), 4));
+          if (e.tags?.length) lines.push(dim(e.tags.join(' · '), 4));
           lines.push(dim(''));
         }
       }

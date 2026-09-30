@@ -59,8 +59,8 @@ export function dataChunks(): Chunk[] {
     push(chunks, `experience.md §${e.id}`, [
       `${e.role} at ${e.company}${e.location ? ` (${e.location})` : ''}, ${e.period}.`,
       ...bullets.map(b => `- ${b}`),
-      `Technologies: ${e.tags.join(', ')}.`,
-    ].join('\n'));
+      e.tags?.length ? `Technologies: ${e.tags.join(', ')}.` : undefined,
+    ].filter(Boolean).join('\n'));
   }
 
   for (const p of projects) {
